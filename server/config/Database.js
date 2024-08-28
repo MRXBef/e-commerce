@@ -1,6 +1,6 @@
-import { Sequelize } from "sequelize"
-import dotenv from 'dotenv'
-import pg from 'pg'
+import { Sequelize } from "sequelize";
+import dotenv from "dotenv";
+import pg from "pg";
 
 //### POSTGRES  MODE
 // dotenv.config()
@@ -17,13 +17,11 @@ import pg from 'pg'
 //     dialectModule: pg
 // })
 
-
 //### DEVELOPMENT MODE
-const db = new Sequelize('e-commerce', 'root', '', {
-    host: 'localhost',
-    dialect: 'mysql',
-    timezone: '+08:00'
+const db = new Sequelize("e-commerce", "root", "", {
+  host: "localhost",
+  dialect: "mysql",
+  timezone: "+08:00",
+});
 
-})
-
-export default db
+export default db;
