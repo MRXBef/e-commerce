@@ -2,29 +2,33 @@ POST http://localhost:5000/register
 Content-Type: application/json
 
 {
-    "username": "johndoe",
+    "email": "johndoe@gmail.com",
     "password": "12345",
     "confPassword": "12345"
 }
 
 ###
-
 POST http://localhost:5000/login
 Content-Type: application/json
 
 {
-    "username": "johndoe",
+    "email": "johndoe@gmail.com",
     "password": "12345"
 }
 
 ###
-
 DELETE http://localhost:5000/logout
 
 ###
-
 GET http://localhost:5000/users
 # Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsInVzZXJuYW1lU2lnbiI6ImpvaG5kb2UiLCJpYXQiOjE3MjQ1MTM1MzgsImV4cCI6MTcyNDUxMzU1M30.UP6vKgEL_4KBAYcrgGGtsl4yEiCjDLi-VFdfnIOK9-U
+
+###
+GET http://localhost:5000/token
+
+
+
+
 
 
 

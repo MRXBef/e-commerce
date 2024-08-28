@@ -19,7 +19,7 @@ import pg from 'pg'
 
 
 //### DEVELOPMENT MODE
-const db = new Sequelize('db_name', 'root', '', {
+const db = new Sequelize('e-commerce', 'root', '', {
     host: 'localhost',
     dialect: 'mysql',
     timezone: '+08:00'
