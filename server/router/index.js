@@ -17,6 +17,9 @@ router.get("/users", getUsers);
 router.get("/token", refreshToken);
 
 //products
-router.post('/product', upload.single('image'), addProduct)
+router.post('/product', upload.single('image'), (err, req, res, next) => {
+    if(err) return res.status(400).json({msg: "Only image files allowed to upload"})
+        next()
+}, addProduct)
 
 export default router;
