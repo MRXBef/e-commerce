@@ -1,10 +1,15 @@
 import express, { json } from "express";
 import dotenv from "dotenv";
 import db from "./config/Database.js";
-import Users from "./models/userModel.js";
 import router from "./router/index.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+
+//import table
+import Users from "./models/userModel.js";
+import Products from "./models/productModel.js";
+import Image from "./models/imageModel.js";
+import Category from "./models/categoryModel.js";
 
 dotenv.config();
 

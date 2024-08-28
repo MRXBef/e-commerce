@@ -18,6 +18,10 @@ const Users = db.define("users", {
     type: DataTypes.TEXT,
     allowNull: false,
   },
+  balance: {
+    type: DataTypes.FLOAT,
+    allowNull: true
+  },
   refreshToken: {
     type: DataTypes.TEXT,
   },

@@ -1,0 +1,9 @@
+POST http://localhost:5000/product
+Content-Type: multipart/form-data; boundary=---011000010111000001101001
+
+-----011000010111000001101001
+Content-Disposition: form-data; name="image"; filename="OIP.jpg"
+Content-Type: image/jpeg
+
+< C:\Users\adamb\Downloads\OIP.jpg
+-----011000010111000001101001--
