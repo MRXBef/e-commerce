@@ -40,8 +40,7 @@ export const addProduct = async (req, res) => {
   const images = req.files.image;
   let uploadPromises = [];
   
-  let index = 1
-  for(const image of images){
+  images.forEach((image, index) => {
     const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png']
     if(!allowedTypes.includes(image.mimetype)){
       return res.status(400).json({msg: `Invaild file type for image '${image.name}', only JPEG, JPG, and PNG files are allowed to upload`})
@@ -58,8 +57,7 @@ export const addProduct = async (req, res) => {
         }
       })
     }))
-    index++
-  }
+  })
 
   try {
     Promise.all(uploadPromises).then(async (fileNames) => {
