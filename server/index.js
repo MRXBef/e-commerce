@@ -4,6 +4,7 @@ import db from "./config/Database.js";
 import router from "./router/index.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import formParser from 'express-fileupload'
 
 //import table
 import Users from "./models/userModel.js";
@@ -20,7 +21,7 @@ try {
   await db.authenticate();
   console.log("database connected");
 
-  await db.sync();
+  // await db.sync();
 } catch (error) {
   console.log("error: " + error);
 }
@@ -28,6 +29,7 @@ try {
 app.use(cors());
 app.use(cookieParser());
 app.use(json());
+app.use(formParser())
 app.use(router);
 
 app.listen(PORT, () => {

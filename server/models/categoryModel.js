@@ -9,7 +9,7 @@ const Category = db.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    user_id: {
+    product_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
