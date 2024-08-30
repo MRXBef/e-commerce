@@ -118,7 +118,8 @@ export const getAllProduct = async(req, res) => {
         [Op.not]: {
           user_id: userID
         }
-      }
+      },
+      limit: 20
     })
 
     const newProducts = products.map(product => {
@@ -140,5 +141,18 @@ export const getAllProduct = async(req, res) => {
   } catch (error) {
     console.log(error.message)
     res.status(500).json({msg: "Internal server error"})
+  }
+}
+
+export const getProductThumbnail = (req, res) => {
+  const filename = req.params['filename']
+  const __filename = fileURLToPath(import.meta.url)
+  const __dirname = dirname(dirname(__filename))
+  
+  const image = path.join(__dirname, "uploads/product-image", filename)
+  if(fs.existsSync(image)){
+    res.status(200).sendFile(image)
+  }else{
+    res.status(404).json({msg: "Image not found!"})
   }
 }
