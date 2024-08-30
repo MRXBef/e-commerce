@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@coreui/icons": "^3.0.1",
+    "@coreui/icons-react": "^2.3.0",
     "axios": "^1.7.5",
     "bulma": "^1.0.2",
     "dotenv": "^16.4.5",

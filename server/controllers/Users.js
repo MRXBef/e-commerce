@@ -6,18 +6,18 @@ import {v4 as uuidv4} from 'uuid'
 export const register = async (req, res) => {
   const { email, password, confPassword } = req.body;
   if (!email || !password || !confPassword) {
-    return res.status(400).json({ msg: "All field are required!" });
+    return res.status(400).json({ msg: "Semua kolom wajib di isi!" });
   }
   if (password !== confPassword) {
     return res
       .status(400)
-      .json({ msg: "Password and confirm password must be match!" });
+      .json({ msg: "Password dan konfirmasi password harus sama!" });
   }
 
   try {
     const user = await Users.findOne({ where: { email: email } });
     if (user) {
-      return res.status(409).json({ msg: "email already taken!" });
+      return res.status(409).json({ msg: "email telah digunakan!" });
     }
 
     const hashPassword = await bcrypt.hash(password, 10);
@@ -29,7 +29,7 @@ export const register = async (req, res) => {
       password: hashPassword,
       balance: 0,
     });
-    return res.status(200).json({ msg: "Create user successfuly!" });
+    return res.status(200).json({ msg: "Berhasil membuat akun" });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "Internal server error!" });
@@ -39,17 +39,17 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    return res.status(400).json({ msg: "All field are required!" });
+    return res.status(400).json({ msg: "Semua kolom wajib diisi!" });
   }
 
   try {
     const user = await Users.findOne({ where: { email: email } });
     if (!user) {
-      return res.status(404).json({ msg: "User not found!" });
+      return res.status(404).json({ msg: "Email tidak ditemukan!" });
     }
     const compare = await bcrypt.compare(password, user.password);
     if (!compare) {
-      return res.status(403).json({ msg: "Wrong password" });
+      return res.status(403).json({ msg: "Password salah!" });
     }
 
     const userId = user.id;
@@ -103,7 +103,7 @@ export const logout = async (req, res) => {
     res
       .clearCookie("refreshToken")
       .status(200)
-      .json({ msg: "Logout successfuly" });
+      .json({ msg: "Berhasil keluar!" });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "Internal server error!" });

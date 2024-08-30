@@ -12,7 +12,7 @@ export const addProduct = async (req, res) => {
   req.userID = 1
 
   if (!req.files || !req.files.image) {
-    return res.status(400).json({ msg: "No file were uploaded" });
+    return res.status(400).json({ msg: "Tidak ada gambar yang di unggah!" });
   }
 
   if(!Array.isArray(req.files.image)){
@@ -20,14 +20,14 @@ export const addProduct = async (req, res) => {
   }
 
   if (req.files.image.length > 5) {
-    return res.status(400).json({ msg: "Maximum images for a product is 5 files" });
+    return res.status(400).json({ msg: "Maksimal gambar yang boleh di unggah sebanyak 5 gambar" });
   }
 
   const { name, description, price, category, stock, discount } = req.body;
   const requiredFields = { name, description, price, category };
   for (const key in requiredFields) {
     if (requiredFields[key] === undefined || requiredFields[key] === "") {
-      return res.status(400).json({ msg: `${key} are required` });
+      return res.status(400).json({ msg: `${key} dibutuhkan!` });
     }
   }
 
@@ -45,7 +45,7 @@ export const addProduct = async (req, res) => {
   images.forEach((image, index) => {
     const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png']
     if(!allowedTypes.includes(image.mimetype)){
-      return res.status(400).json({msg: `Invaild file type for image '${image.name}', only JPEG, JPG, and PNG files are allowed to upload`})
+      return res.status(400).json({msg: `Tipe tidak sesuai untuk nama file '${image.name}', hanya JPEG, JPG, dan PNG tipe file yang boleh di unggah!`})
     }
 
     const fileName = `image_${Date.now()}_${index}.${image.mimetype.split('/')[1]}`
@@ -88,7 +88,7 @@ export const addProduct = async (req, res) => {
         })
       }
       
-      res.json({message: 'Product uploaded successfully'});
+      res.json({message: 'Produk berhasil diunggah!'});
     }).catch((err) => {
       res.status(500).json({ message: 'Failed to upload files.', error: err.message });
     })
