@@ -5,6 +5,8 @@ import {v4 as uuidv4} from 'uuid'
 import Products from "../models/productModel.js";
 import Image from "../models/imageModel.js";
 import Category from "../models/categoryModel.js";
+import { Op } from "sequelize";
+import Users from "../models/userModel.js";
 
 export const addProduct = async (req, res) => {
   req.userID = 1
@@ -21,7 +23,7 @@ export const addProduct = async (req, res) => {
     return res.status(400).json({ msg: "Maximum images for a product is 5 files" });
   }
 
-  const { name, description, price, category } = req.body;
+  const { name, description, price, category, stock, discount } = req.body;
   const requiredFields = { name, description, price, category };
   for (const key in requiredFields) {
     if (requiredFields[key] === undefined || requiredFields[key] === "") {
@@ -31,7 +33,7 @@ export const addProduct = async (req, res) => {
 
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = dirname(dirname(__filename));
-  const uploadPath = path.join(__dirname, "uploads");
+  const uploadPath = path.join(__dirname, "uploads/product-image");
 
   if (!fs.existsSync(uploadPath)) {
     fs.mkdirSync(uploadPath);
@@ -66,6 +68,8 @@ export const addProduct = async (req, res) => {
         name: name,
         description: description,
         price: price,
+        stock: stock ?? 0,
+        discount: discount ?? 0,
         user_id: req.userID
       })
 
@@ -92,6 +96,49 @@ export const addProduct = async (req, res) => {
     console.log(error.message)
     res.status(500).json({msg: "Internal server error"})
   }
-
-
 };
+
+export const getAllProduct = async(req, res) => {
+  const userID = 2
+  try {
+    const products = await Products.findAll({
+      attributes: ['uuid', 'name', 'price', 'discount'],
+      include: [{
+        model: Image,
+        required: true,
+        as: 'images',
+        attributes: ['file_name']
+      },{
+        model: Users,
+        required: true,
+        as: 'user',
+        attributes: ['username', 'avatar']
+      }],
+      where: {
+        [Op.not]: {
+          user_id: userID
+        }
+      }
+    })
+
+    const newProducts = products.map(product => {
+      return {
+        uuid: product.dataValues.uuid,
+        name: product.dataValues.name,
+        price: product.dataValues.price,
+        discount: product.dataValues.discount,
+        thumbail: product.dataValues.images[0].dataValues.file_name,
+        owner: product.dataValues.user.dataValues.username,
+        owner_avatar: product.dataValues.user.dataValues.avatar
+      }
+    })
+
+    res.status(200).json({
+      msg: "Success",
+      datas: newProducts
+    })
+  } catch (error) {
+    console.log(error.message)
+    res.status(500).json({msg: "Internal server error"})
+  }
+}

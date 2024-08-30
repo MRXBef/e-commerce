@@ -1,6 +1,5 @@
 import { DataTypes } from "sequelize";
 import db from "../config/Database.js";
-import Users from "./userModel.js";
 
 const Image = db.define(
   "image",
@@ -14,13 +13,6 @@ const Image = db.define(
       allowNull: false,
     },
   },
-  {
-    belongsTo: Users,
-    foreignKey: {
-      name: "id",
-      allowNull: false,
-    },
-  }
 );
 
 export default Image;

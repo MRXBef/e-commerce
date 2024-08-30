@@ -7,3 +7,12 @@ Content-Type: image/jpeg
 
 < C:\Users\adamb\Downloads\OIP.jpg
 -----011000010111000001101001--
+
+###
+
+POST http://localhost:5000/product
+Content-Type: application/json
+
+{
+    "name": "bayu"
+}

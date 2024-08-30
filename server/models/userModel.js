@@ -24,7 +24,12 @@ const Users = db.define("users", {
   },
   refreshToken: {
     type: DataTypes.TEXT,
+    allowNull: true
   },
+  avatar: {
+    type: DataTypes.TEXT,
+    allowNull: true
+  }
 });
 
 export default Users;

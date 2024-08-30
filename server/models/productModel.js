@@ -1,6 +1,5 @@
 import { DataTypes } from "sequelize";
 import db from "../config/Database.js";
-import Users from "./userModel.js";
 
 const Products = db.define("products", {
   uuid: {
@@ -19,16 +18,18 @@ const Products = db.define("products", {
     type: DataTypes.FLOAT,
     allowNull: false,
   },
+  stock: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  discount: {
+    type: DataTypes.FLOAT,
+    allowNull: false,
+  },
   user_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-}, {
-    belongsTo: Users,
-    foreignKey: {
-        name: 'id',
-        allowNull: false
-    }
 });
 
 export default Products;

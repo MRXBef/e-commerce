@@ -1,6 +1,5 @@
 import { DataTypes } from "sequelize";
 import db from "../config/Database.js";
-import Users from "./userModel.js";
 
 const Category = db.define(
   "category",
@@ -11,13 +10,6 @@ const Category = db.define(
     },
     product_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-  },
-  {
-    belongsTo: Users,
-    foreignKey: {
-      name: "id",
       allowNull: false,
     },
   }

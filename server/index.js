@@ -12,6 +12,9 @@ import Products from "./models/productModel.js";
 import Image from "./models/imageModel.js";
 import Category from "./models/categoryModel.js";
 
+//import associations
+import defineAssociations from "./models/associations.js";
+
 dotenv.config();
 
 const app = express();
@@ -21,7 +24,9 @@ try {
   await db.authenticate();
   console.log("database connected");
 
-  // await db.sync();
+  defineAssociations()
+
+  await db.sync();
 } catch (error) {
   console.log("error: " + error);
 }

@@ -1,6 +1,7 @@
 import Users from "../models/userModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import {v4 as uuidv4} from 'uuid'
 
 export const register = async (req, res) => {
   const { email, password, confPassword } = req.body;
@@ -20,11 +21,13 @@ export const register = async (req, res) => {
     }
 
     const hashPassword = await bcrypt.hash(password, 10);
+    const username = `${email.split('@')[0]}${uuidv4().split('-')[0]}`
     await Users.create({
-      username: Date.now(),
+      username: username,
       email: email,
       role: "user",
       password: hashPassword,
+      balance: 0,
     });
     return res.status(200).json({ msg: "Create user successfuly!" });
   } catch (error) {
