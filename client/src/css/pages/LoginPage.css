@@ -15,6 +15,7 @@
     display: flex;
     flex-direction: row;
     gap: 10px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
 }
 
 .login-box-inner-hero {
@@ -62,15 +63,27 @@
     color: var(--danger-color);
 }
 
-.login-box-inner-form form input {
+.input-container {
+    position: relative;
     width: 75%;
     height: 40px;
-    border-radius: 10px;
-    outline: none;
-    border: 1px solid #000;
-    padding: 5px;
 }
 
+.input-container input {
+    width: 100%;
+    height: 40px;
+    padding-left: 40px;
+    border: none;
+    outline: none;
+    border: 1px solid var(--danger-color);
+    border-radius: 10px;
+}
+
+.iconku {
+    position: absolute;
+    left: 10px;
+    top: 7px;
+}
 
 .login-box-inner-form form button {
     width: 75%;
@@ -79,6 +92,7 @@
     color: #fff;
     background-color: var(--danger-color);
 }
+
 @media (max-width: 767px) {
     .login-box-outer {
         width: 80%;
