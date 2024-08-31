@@ -21,7 +21,7 @@ export const register = async (req, res) => {
     }
 
     const hashPassword = await bcrypt.hash(password, 10);
-    const username = `${email.split('@')[0]}${uuidv4().split('-')[0]}`
+    const username = `user${uuidv4().split('-')[0]}`
     await Users.create({
       username: username,
       email: email,

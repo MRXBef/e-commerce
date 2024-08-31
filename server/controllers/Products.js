@@ -42,10 +42,12 @@ export const addProduct = async (req, res) => {
   const images = req.files.image;
   let uploadPromises = [];
   
-  images.forEach((image, index) => {
+  let index = 1
+  for(const image of images) {
     const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png']
     if(!allowedTypes.includes(image.mimetype)){
       return res.status(400).json({msg: `Tipe tidak sesuai untuk nama file '${image.name}', hanya JPEG, JPG, dan PNG tipe file yang boleh di unggah!`})
+      break;
     }
 
     const fileName = `image_${Date.now()}_${index}.${image.mimetype.split('/')[1]}`
@@ -59,7 +61,8 @@ export const addProduct = async (req, res) => {
         }
       })
     }))
-  })
+    index++
+  }
 
   try {
     Promise.all(uploadPromises).then(async (fileNames) => {
@@ -128,7 +131,7 @@ export const getAllProduct = async(req, res) => {
         name: product.dataValues.name,
         price: product.dataValues.price,
         discount: product.dataValues.discount,
-        thumbail: product.dataValues.images[0].dataValues.file_name,
+        thumbnail: product.dataValues.images[0].dataValues.file_name,
         owner: product.dataValues.user.dataValues.username,
         owner_avatar: product.dataValues.user.dataValues.avatar
       }

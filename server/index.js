@@ -26,7 +26,9 @@ try {
 
   defineAssociations()
 
-  await db.sync();
+  await db.sync(
+    // {alter: true}
+  );
 } catch (error) {
   console.log("error: " + error);
 }
