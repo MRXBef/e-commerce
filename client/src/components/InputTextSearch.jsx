@@ -2,7 +2,7 @@ import React from "react";
 import CIcon from "@coreui/icons-react";
 import * as icon from "@coreui/icons";
 
-const InputTextWithICon = ({ args }) => {
+const InputTextSearch = ({ args }) => {
   return (
     <div
       className="input-container"
@@ -13,16 +13,19 @@ const InputTextWithICon = ({ args }) => {
       }}
     >
       <span className="iconku">
-        <i
-          style={{
-            color: args.iconColor || "var(--secondary-color)",
-            position: "absolute",
-            left: "10px",
-            top: "7px",
-          }}
-        >
-          <CIcon icon={args.iconName} />
-        </i>
+            <button
+            type="submit"
+            style={{
+                color: args.iconColor || "var(--secondary-color)",
+                position: "absolute",
+                right: "10px",
+                top: "7px",
+                outline: 'none'
+            }}
+            >
+            <CIcon icon={args.iconName} />
+            </button>
+
       </span>
       <input
         type="text"
@@ -30,7 +33,8 @@ const InputTextWithICon = ({ args }) => {
         style={{
           width: "100%",
           height: "40px",
-          paddingLeft: "40px",
+          paddingRight: "40px",
+          paddingLeft: "10px",
           outline: "none",
           border: "1px solid var(--danger-color)",
           borderRadius: "10px",
@@ -41,4 +45,4 @@ const InputTextWithICon = ({ args }) => {
   );
 };
 
-export default InputTextWithICon;
+export default InputTextSearch;

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../css/Header.css";
 import logoProduct from "../assets/img/logo-product.png";
-import InputTextWithICon from "./InputTextWithICon";
+import InputTextSearch from "./InputTextSearch";
 import CIcon from "@coreui/icons-react";
 import * as icon from "@coreui/icons";
 import { useNavigate } from "react-router-dom";
@@ -14,6 +14,8 @@ const Header = () => {
   const Search = async(e) => {
     e.preventDefault()
 
+    console.log(searchValue)
+
   }
 
   return (
@@ -23,12 +25,14 @@ const Header = () => {
       </div>
       <div className="search-container">
         <form onSubmit={Search}>
-          <InputTextWithICon
-            iconName={icon.cilSearch}
-            iconColor={"var(--danger-color)"}
-            width={"100%"}
-            placeholder={"Cari barang"}
-            event={(e) => setSearchValue(e.target.value)}
+          <InputTextSearch
+            args={{
+              iconName: icon.cilSearch,
+              iconColor: 'var(--secondary-color)',
+              width: '100%',
+              placeholder: "Cari Barang",
+              event: function(e){setSearchValue(e.target.value)}
+            }}
           />
         </form>
       </div>

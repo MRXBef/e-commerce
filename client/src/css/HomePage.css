@@ -3,4 +3,30 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    align-items: center;
+}
+
+.content-container {
+    width: 80%;
+    min-height: 100vh;
+    margin-top: 75px;
+    padding-top: 3vh;
+}
+
+.highlight-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15%, 1fr));
+    gap: 20px;
+    padding: 16px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+}
+
+@media (max-width: 767px) {
+    .highlight-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(30%, 1fr));
+        gap: 20px;
+        padding: 16px;
+        box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+    }
 }
