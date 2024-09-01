@@ -11,6 +11,7 @@ import Users from "./models/userModel.js";
 import Products from "./models/productModel.js";
 import Image from "./models/imageModel.js";
 import Category from "./models/categoryModel.js";
+import Transaction from "./models/transactionModel.js";
 
 //import associations
 import defineAssociations from "./models/associations.js";
@@ -23,12 +24,9 @@ const PORT = process.env.PORT || 5000;
 try {
   await db.authenticate();
   console.log("database connected");
-
+  
   defineAssociations()
-
-  await db.sync(
-    // {alter: true}
-  );
+  await db.sync({force: true});
 } catch (error) {
   console.log("error: " + error);
 }

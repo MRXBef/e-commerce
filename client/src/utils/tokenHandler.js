@@ -1,7 +1,7 @@
 import axios from "axios";
 import {jwtDecode} from 'jwt-decode'
 
-export const axiosInterceptors = ({expire, setToken, setExpire}) => {
+const axiosInterceptors = ({expire, setToken, setExpire}) => {
     const axiosJWT = axios.create();
     axiosJWT.interceptors.request.use(async (config) => {
         const currentDate = new Date();
@@ -18,3 +18,5 @@ export const axiosInterceptors = ({expire, setToken, setExpire}) => {
     });
     return axiosJWT
 }
+
+export default axiosInterceptors

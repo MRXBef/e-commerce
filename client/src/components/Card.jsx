@@ -77,7 +77,7 @@ const Card = ({ args }) => {
             justifyContent: "center",
           }}
         >
-          {args.productDiscount > 0 ? (
+          {productDiscount > 0 ? (
             <>
               <h1 style={{ color: "var(--primary-color)", fontWeight: "bold" }}>
                 {rupiahFormat(productPrice - productPrice * productDiscount)}
@@ -96,12 +96,6 @@ const Card = ({ args }) => {
               </p>
             </>
           )}
-          {/* <h1 style={{ color: "var(--primary-color)", fontWeight: "bold" }}>
-            {args.productPrice}
-          </h1>
-          <div style={{ width: "50%" }}>
-
-          </div> */}
         </div>
       </div>
     </div>

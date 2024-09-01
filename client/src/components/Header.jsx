@@ -29,7 +29,7 @@ const Header = ({isAuthorize}) => {
               iconName: icon.cilSearch,
               iconColor: 'var(--secondary-color)',
               width: '100%',
-              placeholder: "Cari Barang",
+              placeholder: "Cari Produk",
               event: function(e){setSearchValue(e.target.value)}
             }}
           />
