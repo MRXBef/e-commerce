@@ -102,7 +102,7 @@ export const addProduct = async (req, res) => {
 };
 
 export const getAllProduct = async(req, res) => {
-  const userID = req.publicId
+  const {publicId} = req
 
   try {
     const products = await Products.findAll({
@@ -120,7 +120,7 @@ export const getAllProduct = async(req, res) => {
       }],
       where: {
         [Op.and]: [
-          { user_id: { [Op.ne]: userID ?? 0 } },
+          { user_id: { [Op.ne]: publicId ?? 0 } },
           { user_id: { [Op.not]: null } }
         ]
       },

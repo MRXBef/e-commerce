@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
 
-//fungsi ini sebagai middleware untuk menangani request dari halaman publik dari frontend
+//fungsi ini sebagai middleware yang menangani request untuk halaman publik dari frontend
 const getPublicId = (req, res, next) => {
     const {refreshToken} = req.cookies
     if(refreshToken === undefined) {

@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import "../css/HomePage.css";
 import Header from "../components/Header";
 import Card from "../components/Card";
-import productImage from "../assets/img/productTest.jpeg";
-import ownerProfile from "../assets/img/login-hero.png";
 import axios from "axios";
 import PageLoader from "../components/PageLoader";
 import axiosInterceptors from "../utils/tokenHandler";
@@ -32,6 +30,7 @@ const HomePage = () => {
         setAuthorized(false);
         setCheckAuthorized(false);
       }else {
+        setExpire(jwtDecode(response.data.accessToken).exp)
         setAuthorized(true);
         setToken(response.data.accessToken);
         setCheckAuthorized(false);
