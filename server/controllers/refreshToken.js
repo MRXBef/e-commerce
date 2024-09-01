@@ -3,13 +3,22 @@ import jwt from "jsonwebtoken";
 
 export const refreshToken = async (req, res) => {
   const token = req.cookies.refreshToken;
-  if (!token) return res.sendStatus(401);
+
+  if (!token) {
+    return res.status(200).json({ accessToken: null, isPublicUser: true });
+  }
+
   try {
     const user = await Users.findOne({ where: { refreshToken: token } });
-    if (!user) return res.sendStatus(403);
+    if (!user) {
+      return res.status(200).json({ accessToken: null, isPublicUser: true });
+    }
 
     jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
-      if (err) return res.sendStatus(403);
+      if (err) {
+        return res.status(200).json({ accessToken: null, isPublicUser: true });
+      }
+
       const userID = user.id;
       const emailSign = user.email;
       const usernameSign = user.username;
@@ -19,7 +28,7 @@ export const refreshToken = async (req, res) => {
         { expiresIn: "15s" }
       );
 
-      res.status(200).json({ accessToken });
+      res.status(200).json({ accessToken, isPublicUser: false });
     });
   } catch (error) {
     console.log(error);

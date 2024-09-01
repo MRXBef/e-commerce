@@ -3,6 +3,7 @@ import { register, getUsers, login, logout } from "../controllers/Users.js";
 import verifyToken from "../middleware/verifyToken.js";
 import { refreshToken } from "../controllers/RefreshToken.js";
 import { addProduct, getAllProduct, getProductThumbnail } from "../controllers/Products.js";
+import getPublicId from "../middleware/getPublicId.js";
 
 const router = express.Router();
 
@@ -17,7 +18,7 @@ router.get("/token", refreshToken);
 
 //products
 router.post('/product', addProduct)
-router.get('/product', getAllProduct)
-router.get('/product/:filename', getProductThumbnail)
+router.get('/product/', getPublicId, getAllProduct)
+router.get('/product/thumbnail/:filename', getProductThumbnail)
 
 export default router;

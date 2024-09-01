@@ -26,7 +26,7 @@ try {
   console.log("database connected");
   
   defineAssociations()
-  await db.sync({force: true});
+  await db.sync();
 } catch (error) {
   console.log("error: " + error);
 }

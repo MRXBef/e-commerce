@@ -102,7 +102,8 @@ export const addProduct = async (req, res) => {
 };
 
 export const getAllProduct = async(req, res) => {
-  const userID = 2
+  const userID = req.publicId
+
   try {
     const products = await Products.findAll({
       attributes: ['uuid', 'name', 'price', 'discount'],
@@ -118,9 +119,10 @@ export const getAllProduct = async(req, res) => {
         attributes: ['username', 'avatar']
       }],
       where: {
-        [Op.not]: {
-          user_id: userID
-        }
+        [Op.and]: [
+          { user_id: { [Op.ne]: userID ?? 0 } },
+          { user_id: { [Op.not]: null } }
+        ]
       },
       limit: 20
     })

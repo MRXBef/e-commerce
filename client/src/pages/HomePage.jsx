@@ -8,6 +8,7 @@ import axios from "axios";
 import PageLoader from "../components/PageLoader";
 import axiosInterceptors from "../utils/tokenHandler";
 import rupiahFormat from "../utils/rupiahFormat";
+import { jwtDecode } from "jwt-decode";
 
 const HomePage = () => {
   const [authorized, setAuthorized] = useState(false);
@@ -21,21 +22,24 @@ const HomePage = () => {
 
   useEffect(() => {
     refreshToken();
-    getProducts();
+    getProducts()
   }, []);
 
   const refreshToken = async () => {
     try {
       const response = await axios.get(`${import.meta.env.VITE_BASEURL}/token`);
-      if (response) {
+      if (response.data.isPublicUser) {
+        setAuthorized(false);
+        setCheckAuthorized(false);
+      }else {
         setAuthorized(true);
         setToken(response.data.accessToken);
         setCheckAuthorized(false);
       }
     } catch (error) {
-      console.log(error.response);
-      setAuthorized(false);
+      console.log(error.response)
       setCheckAuthorized(true);
+
     }
   };
 
@@ -83,7 +87,7 @@ const HomePage = () => {
               key={index}
               args={{
                 productTitle: product.name,
-                thumbnail: `${import.meta.env.VITE_BASEURL}/product/${
+                thumbnail: `${import.meta.env.VITE_BASEURL}/product/thumbnail/${
                   product.thumbnail
                 }`,
                 ownerAvatar: product.avatar,
