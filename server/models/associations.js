@@ -13,7 +13,7 @@ const defineAssociations = () => {
     Image.belongsTo(Products, {
         foreignKey: "product_id",
         as: "product",
-        onDelete: 'CASCADE'
+        onDelete: 'SET NULL'
     })
     Products.hasMany(Image, {
         foreignKey: "product_id",
@@ -24,7 +24,7 @@ const defineAssociations = () => {
     Category.belongsTo(Products, {
         foreignKey: "product_id",
         as: "product",
-        onDelete: 'CASCADE'
+        onDelete: 'SET NULL'
     })
     Products.hasMany(Category, {
         foreignKey: "product_id",
@@ -35,7 +35,7 @@ const defineAssociations = () => {
     Products.belongsTo(Users, {
         foreignKey: "user_id",
         as: "user",
-        onDelete: 'CASCADE'
+        onDelete: 'SET NULL'
     })
     Users.hasMany(Products, {
         foreignKey: "user_id",
@@ -46,7 +46,7 @@ const defineAssociations = () => {
     Cart.belongsTo(Products, {
         foreignKey: 'product_id',
         as: 'product',
-        onDelete: 'CASCADE'
+        onDelete: 'SET NULL'
     })
     Products.hasMany(Cart, {
         foreignKey: 'product_id',
@@ -55,7 +55,7 @@ const defineAssociations = () => {
     Cart.belongsTo(Users, {
         foreignKey: 'user_id',
         as: 'user',
-        onDelete: 'CASCADE'
+        onDelete: 'SET NULL'
     })
     Users.hasMany(Cart, {
         foreignKey: 'user_id',
@@ -66,12 +66,12 @@ const defineAssociations = () => {
     UserRelation.belongsTo(Users, {
         foreignKey: 'followed_user_id',
         as: 'followed',
-        onDelete: 'CASCADE'
+        onDelete: 'SET NULL'
     })
     UserRelation.belongsTo(Users, {
         foreignKey: 'following_user_id',
         as: 'following',
-        onDelete: 'CASCADE'
+        onDelete: 'SET NULL'
     })
     Users.hasMany(UserRelation, {
         foreignKey: 'followed_user_id',

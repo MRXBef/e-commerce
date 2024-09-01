@@ -5,12 +5,23 @@ const Category = db.define(
   "category",
   {
     name: {
-      type: DataTypes.STRING,
+      type: DataTypes.ENUM(
+        'fashion', 
+        'elektronik', 
+        'kesehatan', 
+        'otomotif', 
+        'bayi', 
+        'furniture', 
+        'mainan', 
+        'olahraga', 
+        'perlengkapan-rumah',
+        'kebutuhan-harian'
+      ),
       allowNull: false,
     },
     product_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
   }
 );

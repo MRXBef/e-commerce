@@ -28,7 +28,7 @@ const Products = db.define("products", {
   },
   user_id: {
     type: DataTypes.INTEGER,
-    allowNull: false,
+    allowNull: true,
   },
 });
 
