@@ -4,43 +4,27 @@ import Header from "../components/Header";
 import Card from "../components/Card";
 import axios from "axios";
 import PageLoader from "../components/PageLoader";
-import axiosInterceptors from "../utils/tokenHandler";
+import { axiosInterceptors, decodeToken, refreshToken } from "../utils/tokenHandler";
 import rupiahFormat from "../utils/rupiahFormat";
 import { jwtDecode } from "jwt-decode";
 
 const HomePage = () => {
+  //auth state
   const [authorized, setAuthorized] = useState(false);
   const [checkIsAuthorized, setCheckAuthorized] = useState(true);
   const [token, setToken] = useState(null);
   const [expire, setExpire] = useState(0);
+
+  //root state
   const [products, setProducts] = useState([]);
 
   //inisialisasi axios interceptors
   const axiosJWT = axiosInterceptors({ expire, setToken, setExpire });
 
   useEffect(() => {
-    refreshToken();
+    refreshToken({setAuthorized, setCheckAuthorized, setExpire, setToken});
     getProducts()
   }, []);
-
-  const refreshToken = async () => {
-    try {
-      const response = await axios.get(`${import.meta.env.VITE_BASEURL}/token`);
-      if (response.data.isPublicUser) {
-        setAuthorized(false);
-        setCheckAuthorized(false);
-      }else {
-        setExpire(jwtDecode(response.data.accessToken).exp)
-        setAuthorized(true);
-        setToken(response.data.accessToken);
-        setCheckAuthorized(false);
-      }
-    } catch (error) {
-      console.log(error.response)
-      setCheckAuthorized(true);
-
-    }
-  };
 
   const getProducts = async () => {
     try {
@@ -74,7 +58,10 @@ const HomePage = () => {
 
   return (
     <div className="homepage-container">
-      <Header isAuthorize={authorized} />
+      <Header args={{
+        isAuthorized: authorized,
+        token: decodeToken(token)
+      }} />
 
       <div className="content-container">
         <div className="highlight-title-container">
@@ -86,12 +73,14 @@ const HomePage = () => {
               key={index}
               args={{
                 productTitle: product.name,
-                thumbnail: `${import.meta.env.VITE_BASEURL}/product/thumbnail/${
+                productThumbnail: `${import.meta.env.VITE_BASEURL}/product/thumbnail/${
                   product.thumbnail
                 }`,
-                ownerAvatar: product.avatar,
+                productOwnerAvatar: product.avatar,
                 productPrice: rupiahFormat(product.price),
                 productDiscount: product.discount,
+                productUuid: product.uuid,
+                productOwner: product.owner
               }}
             />
           ))}

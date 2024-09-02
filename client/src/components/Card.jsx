@@ -1,13 +1,17 @@
 import React from "react";
 import rupiahFormat from "../utils/rupiahFormat";
-import avatar from '../assets/img/avatar.png'
+import avatar from "../assets/img/avatar.png";
+import { useNavigate } from "react-router-dom";
 
 const Card = ({ args }) => {
+  const navigate = useNavigate()
   const productPrice = parseInt(args.productPrice.replace(/[^0-9]/g, ""));
   const productDiscount = parseFloat(args.productDiscount);
 
   return (
     <div
+      // href={`/product/${args.productUuid}`}
+      onClick={() => navigate(`/product/${args.productUuid}`)}
       style={{
         boxShadow:
           "rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px",
@@ -16,10 +20,17 @@ const Card = ({ args }) => {
         flexDirection: "column",
         padding: "5px",
         position: "relative",
+        cursor: 'pointer'
       }}
     >
       <img
-        src={args.ownerAvatar ?? avatar}
+        onClick={
+          (e) => {
+            e.stopPropagation()
+            navigate(`/shop/${args.productOwner}`)
+          }
+        }
+        src={args.productOwnerAvatar ?? avatar}
         style={{
           position: "absolute",
           top: "-10px",
@@ -35,7 +46,7 @@ const Card = ({ args }) => {
         }}
       />
       <img
-        src={args.thumbnail}
+        src={args.productThumbnail}
         style={{
           width: "100%",
           height: "200px",
@@ -46,7 +57,7 @@ const Card = ({ args }) => {
         style={{
           width: "100%",
           overflow: "hidden",
-          textAlign: 'center'
+          textAlign: "center",
         }}
       >
         <h1
@@ -91,9 +102,9 @@ const Card = ({ args }) => {
               <h1 style={{ color: "var(--primary-color)", fontWeight: "bold" }}>
                 {rupiahFormat(productPrice - productPrice * productDiscount)}
               </h1>
-              <p style={{ fontSize: "12px", textDecoration: "line-through" }}>
-                
-              </p>
+              <p
+                style={{ fontSize: "12px", textDecoration: "line-through" }}
+              ></p>
             </>
           )}
         </div>

@@ -6,7 +6,7 @@ import CIcon from "@coreui/icons-react";
 import * as icon from "@coreui/icons";
 import { useNavigate } from "react-router-dom";
 
-const Header = ({isAuthorize}) => {
+const Header = ({args}) => {
   const navigate = useNavigate();
 
   const [searchValue, setSearchValue] = useState('')
@@ -36,8 +36,10 @@ const Header = ({isAuthorize}) => {
         </form>
       </div>
       <div className="personal-container">
-        {isAuthorize ? (
-          <button>
+        {args.isAuthorized ? (
+          <button
+          onClick={() => navigate(`/mprofile/${args.token.usernameSign}`)}
+          >
             <i style={{color: '#fff'}}>
               <CIcon icon={icon.cilUser}/>
             </i>
