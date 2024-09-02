@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../css/Header.css";
+import "../css/components-css/Header.css";
 import logoProduct from "../assets/img/logo-product.png";
 import InputTextSearch from "./InputTextSearch";
 import CIcon from "@coreui/icons-react";

@@ -1,8 +1,8 @@
 import express from "express";
-import { register, getUsers, login, logout } from "../controllers/Users.js";
+import { register, getUserData, login, logout, getUserAvatar } from "../controllers/Users.js";
 import verifyToken from "../middleware/verifyToken.js";
 import { refreshToken } from "../controllers/RefreshToken.js";
-import { addProduct, getAllProduct, getProductThumbnail } from "../controllers/Products.js";
+import { addProduct, getAllProduct, getProductImage } from "../controllers/Products.js";
 import getPublicId from "../middleware/getPublicId.js";
 
 const router = express.Router();
@@ -11,14 +11,17 @@ const router = express.Router();
 router.post("/register", register);
 router.post("/login", login);
 router.delete("/logout", logout);
-router.get("/users", getUsers);
 
 //token
 router.get("/token", refreshToken);
 
+//users
+router.get("/user", verifyToken, getUserData);
+router.get('/user/avatar/:filename', getUserAvatar)
+
 //products
 router.post('/product', addProduct)
 router.get('/product/', getPublicId, getAllProduct)
-router.get('/product/thumbnail/:filename', getProductThumbnail)
+router.get('/product/image/:filename', getProductImage)
 
 export default router;

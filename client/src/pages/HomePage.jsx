@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "../css/HomePage.css";
+import "../css/pages-css/HomePage.css";
 import Header from "../components/Header";
 import Card from "../components/Card";
 import axios from "axios";
@@ -73,10 +73,10 @@ const HomePage = () => {
               key={index}
               args={{
                 productTitle: product.name,
-                productThumbnail: `${import.meta.env.VITE_BASEURL}/product/thumbnail/${
+                productThumbnail: `${import.meta.env.VITE_BASEURL}/product/image/${
                   product.thumbnail
                 }`,
-                productOwnerAvatar: product.avatar,
+                ownerAvatar: `${import.meta.env.VITE_BASEURL}/user/avatar/${product.owner_avatar}`,
                 productPrice: rupiahFormat(product.price),
                 productDiscount: product.discount,
                 productUuid: product.uuid,

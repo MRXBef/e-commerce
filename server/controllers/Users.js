@@ -2,6 +2,12 @@ import Users from "../models/userModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import {v4 as uuidv4} from 'uuid'
+import {fileURLToPath} from 'url'
+import path, { dirname } from "path";
+import fs from 'fs'
+import Products from "../models/productModel.js";
+import Image from "../models/imageModel.js";
+import UserRelation from "../models/userRelation.js";
 
 export const register = async (req, res) => {
   const { email, password, confPassword } = req.body;
@@ -21,7 +27,7 @@ export const register = async (req, res) => {
     }
 
     const hashPassword = await bcrypt.hash(password, 10);
-    const username = `user_${uuidv4().split('-')[0]}`
+    const username = `user_${uuidv4().split('-')[0]}${Date.now()}`
     await Users.create({
       username: username,
       email: email,
@@ -55,13 +61,14 @@ export const login = async (req, res) => {
     const userId = user.id;
     const usernameSign = user.username;
     const emailSign = user.email;
+    const userAvatar = user.avatar;
     const accessToken = jwt.sign(
-      { userId, emailSign, usernameSign },
+      { userId, emailSign, usernameSign, userAvatar },
       process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: "15s" }
     );
     const refreshToken = jwt.sign(
-      { userId, emailSign, usernameSign },
+      { userId, emailSign, usernameSign, userAvatar },
       process.env.REFRESH_TOKEN_SECRET,
       { expiresIn: "1d" }
     );
@@ -110,12 +117,51 @@ export const logout = async (req, res) => {
   }
 };
 
-export const getUsers = async (req, res) => {
+export const getUserAvatar = async(req, res) => {
+  const filename = req.params['filename']
+  const __filename = fileURLToPath(import.meta.url)
+  const __dirname = dirname(dirname(__filename))
+  const avatar = path.join(__dirname, 'uploads/user-avatar', filename)
+  if(fs.existsSync(avatar)){
+    res.status(200).sendFile(avatar)
+  }else {
+    res.status(404).json({msg: "avatar not found"})
+  }
+}
+
+export const getUserData = async (req, res) => {
+  const {username} = req
+  console.log(username)
   try {
-    const users = await Users.findAll();
-    return res.status(200).json({
-      ...users,
+    const user = await Users.findOne({
+      attributes: ['username', 'email', 'balance', 'avatar'],
+      where: {
+        username: username
+      },
+      include: [{
+        model: Products,
+        required: true,
+        as: 'products',
+        include: [
+          {
+            model: Image,
+            required: true,
+            as: 'images'
+          }
+        ]
+      }, {
+        model: UserRelation,
+        required: false,
+        as: 'followings'
+      }, {
+        model: UserRelation,
+        required: false,
+        as: 'followeds'
+      }]
     });
+
+    res.status(200).json({...user.dataValues})
+    
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "Internal server error!" });

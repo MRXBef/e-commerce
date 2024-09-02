@@ -8,6 +8,7 @@ const verifyToken = async (req, res, next) => {
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
     if (err) return res.sendStatus(403);
     req.userID = decoded.userID;
+    req.username = decoded.usernameSign;
     next();
   });
 };

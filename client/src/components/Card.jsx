@@ -10,7 +10,6 @@ const Card = ({ args }) => {
 
   return (
     <div
-      // href={`/product/${args.productUuid}`}
       onClick={() => navigate(`/product/${args.productUuid}`)}
       style={{
         boxShadow:
@@ -30,7 +29,7 @@ const Card = ({ args }) => {
             navigate(`/shop/${args.productOwner}`)
           }
         }
-        src={args.productOwnerAvatar ?? avatar}
+        src={args.ownerAvatar !== `${import.meta.env.VITE_BASEURL}/user/avatar/null` ? args.ownerAvatar : avatar}
         style={{
           position: "absolute",
           top: "-10px",

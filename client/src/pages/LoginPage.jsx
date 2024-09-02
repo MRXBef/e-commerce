@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../css/LoginPage.css";
+import "../css/pages-css/LoginPage.css";
 import loginHero from "../assets/img/login-hero.png";
 import logoProduct from "../assets/img/logo-product.png";
 import axios from "axios";
