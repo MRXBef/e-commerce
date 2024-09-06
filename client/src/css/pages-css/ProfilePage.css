@@ -4,6 +4,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding-bottom: 5vh;
 }
 
 .content-container {
@@ -21,6 +22,9 @@
     min-height: 20vh;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     display: flex;
+    position: relative;
+    padding-top: 30px;
+    padding-bottom: 30px;
 }
 
 .profile-avatar {
@@ -39,22 +43,68 @@
 }
 
 .profile-status {
-    width: 30%;
+    width: 70%;
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }
-.profile-status div {
+.profile-biodata {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.profile-biodata h1 {
+    font-size: 120%;
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+.profile-menu {
+    position: absolute;
+    width: 100px;
+    height: auto;
+    top: 10px;
+    right: 0;
     display: flex;
     justify-content: center;
-    align-items: center;
     gap: 10px;
 }
 
-.profile-status div h1 {
-    font-size: 150%;
-    color: #000;
+.profile-menu i {
+    color: #fff;
+    cursor: pointer;
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+    background-color: var(--info-color);
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+}
+
+.product-title-container {
+    margin-top: 25px;
+    width: 100%;
+}
+
+.product-title-container h1 {
+    font-weight: 400;
+}
+
+.product-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15%, 1fr));
+    gap: 20px;
+    padding: 16px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+    justify-content: start;
 }
 
 @media (max-width: 767px) {
+    .content-container {
+        width: 90%;
+    }
     .profile-info-container {
         display: flex;
         flex-direction: column;
@@ -65,5 +115,13 @@
     }
     .profile-status {
         width: 100%;
+        align-items: center;
+    }
+    .product-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(30%, 1fr));
+        gap: 20px;
+        padding: 16px;
+        box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     }
 }

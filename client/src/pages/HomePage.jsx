@@ -72,6 +72,8 @@ const HomePage = () => {
             <Card
               key={index}
               args={{
+                isOwnProduct: false,
+                totalOfProduct: products.length,
                 productTitle: product.name,
                 productThumbnail: `${import.meta.env.VITE_BASEURL}/product/image/${
                   product.thumbnail

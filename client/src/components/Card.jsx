@@ -1,12 +1,26 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import rupiahFormat from "../utils/rupiahFormat";
 import avatar from "../assets/img/avatar.png";
 import { useNavigate } from "react-router-dom";
+import CIcon from "@coreui/icons-react";
+import * as icon from "@coreui/icons";
 
 const Card = ({ args }) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const productPrice = parseInt(args.productPrice.replace(/[^0-9]/g, ""));
   const productDiscount = parseFloat(args.productDiscount);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 767);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 767);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
     <div
@@ -19,31 +33,67 @@ const Card = ({ args }) => {
         flexDirection: "column",
         padding: "5px",
         position: "relative",
-        cursor: 'pointer'
+        cursor: "pointer",
+        width: "100%",
+        maxWidth: isMobile
+          ? args.totalOfProduct <= 1
+            ? "100%" // Mobile dengan total produk <= 1
+            : "250px" // Mobile dengan total produk > 1
+          : args.totalOfProduct <= 1
+          ? "250px" // Desktop dengan total produk <= 1
+          : "250px", // Desktop dengan total produk > 1
       }}
     >
-      <img
-        onClick={
-          (e) => {
-            e.stopPropagation()
-            navigate(`/shop/${args.productOwner}`)
+      {args.isOwnProduct ? (
+        <i
+          style={{
+            position: "absolute",
+            top: 0,
+            right: 0,
+            display: "flex",
+            justifyContent: "center",
+            padding: "5px",
+            backgroundColor: "var(--info-color)",
+            borderRadius: "5px",
+            color: "#fff",
+            cursor: "pointer",
+            boxShadow:
+              "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px",
+          }}
+          onClick={(e) => {
+            e.stopPropagation();
+            alert("edit");
+          }}
+        >
+          <CIcon icon={icon.cilPencil} />
+        </i>
+      ) : (
+        <img
+          onClick={(e) => {
+            e.stopPropagation();
+            navigate(`/shop/${args.productOwner}`);
+          }}
+          src={
+            args.ownerAvatar !==
+            `${import.meta.env.VITE_BASEURL}/user/avatar/null`
+              ? args.ownerAvatar
+              : avatar
           }
-        }
-        src={args.ownerAvatar !== `${import.meta.env.VITE_BASEURL}/user/avatar/null` ? args.ownerAvatar : avatar}
-        style={{
-          position: "absolute",
-          top: "-10px",
-          width: "50px",
-          height: "50px",
-          borderRadius: "50%",
-          objectFit: "cover",
-          right: "-10px",
-          border: "2px solid var(--secondary-color)",
-          backgroundColor: "#fff",
-          boxShadow:
-            "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px",
-        }}
-      />
+          style={{
+            position: "absolute",
+            top: "-10px",
+            width: "50px",
+            height: "50px",
+            borderRadius: "50%",
+            objectFit: "cover",
+            right: "-10px",
+            border: "2px solid var(--secondary-color)",
+            backgroundColor: "#fff",
+            boxShadow:
+              "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px",
+          }}
+        />
+      )}
       <img
         src={args.productThumbnail}
         style={{

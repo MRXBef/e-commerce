@@ -8,6 +8,7 @@ import fs from 'fs'
 import Products from "../models/productModel.js";
 import Image from "../models/imageModel.js";
 import UserRelation from "../models/userRelation.js";
+import Cart from "../models/cartModel.js";
 
 export const register = async (req, res) => {
   const { email, password, confPassword } = req.body;
@@ -27,7 +28,7 @@ export const register = async (req, res) => {
     }
 
     const hashPassword = await bcrypt.hash(password, 10);
-    const username = `user_${uuidv4().split('-')[0]}${Date.now()}`
+    const username = `${email.split('@')[0]}${uuidv4().split('-')[0]}`
     await Users.create({
       username: username,
       email: email,
@@ -131,7 +132,6 @@ export const getUserAvatar = async(req, res) => {
 
 export const getUserData = async (req, res) => {
   const {username} = req
-  console.log(username)
   try {
     const user = await Users.findOne({
       attributes: ['username', 'email', 'balance', 'avatar'],
@@ -140,12 +140,12 @@ export const getUserData = async (req, res) => {
       },
       include: [{
         model: Products,
-        required: true,
+        required: false,
         as: 'products',
         include: [
           {
             model: Image,
-            required: true,
+            required: false,
             as: 'images'
           }
         ]
@@ -157,6 +157,10 @@ export const getUserData = async (req, res) => {
         model: UserRelation,
         required: false,
         as: 'followeds'
+      }, {
+        model: Cart,
+        required: false,
+        as: 'carts'
       }]
     });
 
