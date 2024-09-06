@@ -41,7 +41,7 @@ const Card = ({ args }) => {
             : "250px" // Mobile dengan total produk > 1
           : args.totalOfProduct <= 1
           ? "250px" // Desktop dengan total produk <= 1
-          : "250px", // Desktop dengan total produk > 1
+          : "100%", // Desktop dengan total produk > 1
       }}
     >
       {args.isOwnProduct ? (

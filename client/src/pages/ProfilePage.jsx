@@ -119,9 +119,6 @@ const ProfilePage = () => {
           <div className="profile-status">
             <div className="profile-biodata">
               <h1>{user.username}</h1>
-              <h1 style={{ fontSize: "15px", color: "var(--warning-color)" }}>
-                {rupiahFormat(user.balance)}
-              </h1>
               <h1 style={{ fontSize: "15px", color: "var(--info-color)" }}>
                 {user.followeds.length} pengikut | {user.followings.length}{" "}
                 mengikuti
@@ -129,6 +126,20 @@ const ProfilePage = () => {
             </div>
           </div>
           <div className="profile-menu">
+            <h1
+              style={{
+                fontSize: "15px",
+                color: "#fff",
+                borderRadius: "5px",
+                padding: "0px 5px 0px 5px",
+                backgroundColor: "var(--warning-color)",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              {rupiahFormat(user.balance)}
+            </h1>
             <i style={{ position: "relative" }}>
               <p
                 style={{
