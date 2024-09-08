@@ -96,7 +96,7 @@
 
 .product-title-container {
     margin-top: 25px;
-    border-bottom: 3px solid var(--primary-color);
+    /* border-bottom: 3px solid var(--primary-color); */
     padding-bottom: 5px;
     width: 100%;
     display: flex;
@@ -105,7 +105,8 @@
 }
 
 .product-title-container h1 {
-    font-weight: 400;
+    font-weight: 500;
+    color: #000;
 }
 
 .product-title-container i {

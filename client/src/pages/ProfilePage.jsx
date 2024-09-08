@@ -206,7 +206,7 @@ const ProfilePage = () => {
             </div>
             <div className="profile-status">
               <div className="profile-biodata">
-                <h1>{user.username}</h1>
+                <h1>@{user.username}</h1>
                 <h1 style={{ fontSize: "15px", color: "var(--info-color)" }}>
                   {user.followeds.length} pengikut | {user.followings.length}{" "}
                   mengikuti
