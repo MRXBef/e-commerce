@@ -9,7 +9,6 @@ import { Op } from "sequelize";
 import Users from "../models/userModel.js";
 
 export const addProduct = async (req, res) => {
-  req.userID = 2
 
   if (!req.files || !req.files.image) {
     return res.status(400).json({ msg: "Tidak ada gambar yang di unggah!" });

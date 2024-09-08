@@ -2,43 +2,63 @@ import React from "react";
 import CIcon from "@coreui/icons-react";
 import * as icon from "@coreui/icons";
 
-const InputTextWithICon = ({ args }) => {
+const InputTextWithIcon = ({ args }) => {
+  //props [label, width, iconColor, iconName, placeholder, event]
   return (
     <div
       className="input-container"
       style={{
-        position: "relative",
+        display: "flex",
+        flexDirection: "column",
         width: args.width,
-        height: "40px",
+        position: "relative",
       }}
     >
-      <span className="iconku">
-        <i
-          style={{
-            color: args.iconColor || "var(--secondary-color)",
-            position: "absolute",
-            left: "10px",
-            top: "7px",
-          }}
-        >
-          <CIcon icon={args.iconName} />
-        </i>
-      </span>
-      <input
-        type="text"
-        placeholder={args.placeholder}
+      {/* Label */}
+      <label
+        htmlFor="inputWithIcon"
         style={{
-          width: "100%",
-          height: "40px",
-          paddingLeft: "40px",
-          outline: "none",
-          border: "1px solid var(--danger-color)",
-          borderRadius: "10px",
+          marginBottom: "5px",
+          fontSize: "14px",
         }}
-        onChange={args.event}
-      />
+      >
+        {args.label}
+      </label>
+
+      <div style={{ position: "relative", width: "100%" }}>
+        {/* Icon */}
+        <span className="iconku">
+          <i
+            style={{
+              color: args.iconColor || "var(--secondary-color)",
+              position: "absolute",
+              left: "10px",
+              top: "10px",
+            }}
+          >
+            <CIcon icon={args.iconName} />
+          </i>
+        </span>
+
+        {/* Input */}
+        <input
+          id="inputWithIcon"
+          name={args.name}
+          type={args.type}
+          placeholder={args.placeholder}
+          style={{
+            width: "100%",
+            height: "40px",
+            paddingLeft: "40px",
+            outline: "none",
+            border: "1px solid var(--danger-color)",
+            borderRadius: "10px",
+          }}
+          onChange={args.event}
+        />
+      </div>
     </div>
   );
 };
 
-export default InputTextWithICon;
+export default InputTextWithIcon;

@@ -20,7 +20,7 @@ router.get("/user", verifyToken, getUserData);
 router.get('/user/avatar/:filename', getUserAvatar)
 
 //products
-router.post('/product', addProduct)
+router.post('/product', verifyToken, addProduct)
 router.get('/product/', getPublicId, getAllProduct)
 router.get('/product/image/:filename', getProductImage)
 
