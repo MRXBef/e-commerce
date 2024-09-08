@@ -18,20 +18,21 @@
 
 .highlight-title-container {
     width: 100%;
-    border-bottom: 3px solid var(--primary-color);
+    /* border-bottom: 3px solid var(--primary-color); */
     padding-bottom: 5px;
 }
 
 .highlight-title-container h1 {
-    font-weight: 400;
+    font-weight: 500;
+    color: #000;
 }
 
 .highlight-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(15%, 1fr));
     gap: 20px;
-    padding: 16px;
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+    border-radius: 10px;
+    /* box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px; */
 }
 
 @media (max-width: 767px) {
@@ -40,7 +41,7 @@
         grid-template-columns: repeat(auto-fit, minmax(30%, 1fr));
         gap: 20px;
         padding: 16px;
-        box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+        /* box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px; */
     }
     .content-container {
         width: 90%;
