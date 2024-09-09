@@ -48,7 +48,7 @@ const Header = ({args}) => {
           <button onClick={() => navigate('/login')}>
             <p>MASUK</p>
             <i style={{ color: "#fff" }}>
-              <CIcon icon={icon.cilDoor} />
+              <CIcon icon={icon.cilRoom} />
             </i>
           </button>
         )}

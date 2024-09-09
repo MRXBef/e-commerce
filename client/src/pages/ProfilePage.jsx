@@ -139,8 +139,9 @@ const ProfilePage = () => {
           },
         }
       );
-      setIsAddFormShow(false)
-      console.log(response)
+      setIsAddFormShow(false);
+      fetchUserData();
+      console.log(response);
     } catch (error) {
       console.log(error.response);
     }
@@ -274,6 +275,15 @@ const ProfilePage = () => {
             }`}
           >
             <form onClick={(e) => e.stopPropagation()} onSubmit={addProduct}>
+              <h1
+                style={{
+                  fontSize: "17px",
+                  fontWeight: "500",
+                  color: "var(--info-color)",
+                }}
+              >
+                Tambah Produk
+              </h1>
               <InputTextWithICon
                 args={{
                   width: "100%",
@@ -281,9 +291,10 @@ const ProfilePage = () => {
                   name: "productName",
                   event: handleInputChange,
                   iconColor: "var(--secondary-color)",
-                  iconName: icon.cilNoteAdd,
-                  placeholder: "Nama Produk",
+                  iconName: icon.cilPlus,
+                  placeholder: "''",
                   label: "Nama Produk",
+                  borderColor: 'grey'
                 }}
               />
               <InputTextWithICon
@@ -293,9 +304,10 @@ const ProfilePage = () => {
                   name: "productPrice",
                   event: handleInputChange,
                   iconColor: "var(--secondary-color)",
-                  iconName: icon.cilNoteAdd,
-                  placeholder: "Harga Produk",
+                  iconName: icon.cilPlus,
+                  placeholder: "0",
                   label: "Harga Produk",
+                  borderColor: 'grey'
                 }}
               />
               <InputTextWithICon
@@ -305,9 +317,10 @@ const ProfilePage = () => {
                   name: "productStock",
                   event: handleInputChange,
                   iconColor: "var(--secondary-color)",
-                  iconName: icon.cilNoteAdd,
-                  placeholder: "Stok",
+                  iconName: icon.cilPlus,
+                  placeholder: "0",
                   label: "Stok Produk",
+                  borderColor: 'grey'
                 }}
               />
               <InputTextWithICon
@@ -317,23 +330,31 @@ const ProfilePage = () => {
                   name: "productDiscount",
                   event: handleInputChange,
                   iconColor: "var(--secondary-color)",
-                  iconName: icon.cilNoteAdd,
-                  placeholder: "Diskon",
-                  label: "Diskon Produk",
+                  iconName: icon.cilPlus,
+                  placeholder: "0",
+                  label: "Diskon Produk (%)",
+                  borderColor: 'grey' 
                 }}
               />
-              <InputTextWithICon
-                args={{
-                  width: "100%",
-                  type: "text",
-                  name: "productDesc",
-                  event: handleInputChange,
-                  iconColor: "var(--secondary-color)",
-                  iconName: icon.cilNoteAdd,
-                  placeholder: "Deskripsi",
-                  label: "Deskripsi Produk",
+              <label
+                style={{ fontSize: "14px", marginBottom: "-5px" }}
+                htmlFor="textarea"
+              >
+                Deskripsi Produk
+              </label>
+              <textarea
+                className="textarea"
+                id="textarea"
+                placeholder="Deskripsi Produk"
+                style={{
+                  backgroundColor: "#fff",
+                  color: "#000",
+                  border: "1px solid grey",
+                  borderRadius: "10px",
                 }}
-              />
+                onChange={handleInputChange}
+                name="productDesc"
+              ></textarea>
 
               {/* Category Checkboxes */}
               <div
@@ -359,7 +380,7 @@ const ProfilePage = () => {
                     flexWrap: "wrap",
                     justifyContent: "center",
                     width: "100%",
-                    border: "1px solid var(--danger-color)",
+                    border: "1px solid grey",
                     padding: "10px",
                     borderRadius: "10px",
                   }}
@@ -505,21 +526,6 @@ const ProfilePage = () => {
                   onChange={handleFileChange}
                   style={{ display: "none" }} // Menyembunyikan input asli
                 />
-                <label
-                  htmlFor="fileInput"
-                  style={{
-                    display: "inline-block",
-                    padding: "10px 20px",
-                    width: "100%",
-                    textAlign: "center",
-                    backgroundColor: "var(--secondary-color)",
-                    color: "#fff",
-                    borderRadius: "5px",
-                    cursor: "pointer",
-                  }}
-                >
-                  Masukkan Gambar
-                </label>
                 <div
                   style={{
                     display: "flex",
@@ -533,7 +539,8 @@ const ProfilePage = () => {
                       display: "flex",
                       justifyContent: "center",
                       flexWrap: "wrap",
-                      border: "1px solid var(--danger-color)",
+                      border:
+                        files.length > 0 ? "1px solid grey" : "",
                       borderRadius: "10px",
                     }}
                   >
@@ -554,19 +561,44 @@ const ProfilePage = () => {
                   </div>
                 </div>
               </div>
-
-              <button
-                type="submit"
+              <div
                 style={{
-                  width: "100%",
-                  padding: "10px 20px",
-                  color: "#fff",
-                  backgroundColor: "var(--danger-color)",
-                  borderRadius: "5px",
+                  display: "flex",
+                  gap: "10px",
                 }}
               >
-                Tambah Produk
-              </button>
+                <label
+                  htmlFor="fileInput"
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    padding: "10px 20px",
+                    width: "30%",
+                    textAlign: "center",
+                    backgroundColor: "var(--secondary-color)",
+                    color: "#fff",
+                    borderRadius: "5px",
+                    cursor: "pointer",
+                  }}
+                >
+                  <i>
+                    <CIcon icon={icon.cilImage} />
+                  </i>
+                </label>
+                <button
+                  type="submit"
+                  style={{
+                    width: "100%",
+                    padding: "10px 20px",
+                    color: "#fff",
+                    backgroundColor: "var(--primary-color)",
+                    borderRadius: "5px",
+                  }}
+                >
+                  Simpan Produk
+                </button>
+              </div>
             </form>
           </div>
         </div>

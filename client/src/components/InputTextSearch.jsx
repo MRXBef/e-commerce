@@ -36,7 +36,7 @@ const InputTextSearch = ({ args }) => {
           paddingRight: "40px",
           paddingLeft: "10px",
           outline: "none",
-          border: "1px solid var(--danger-color)",
+          border: "1px solid grey",
           borderRadius: "10px",
         }}
         onChange={args.event}

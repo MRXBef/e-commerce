@@ -51,7 +51,7 @@ const InputTextWithIcon = ({ args }) => {
             height: "40px",
             paddingLeft: "40px",
             outline: "none",
-            border: "1px solid var(--danger-color)",
+            border: `1px solid ${args.borderColor || 'var(--primary-color)'}`,
             borderRadius: "10px",
           }}
           onChange={args.event}

@@ -30,6 +30,8 @@ export const addProduct = async (req, res) => {
     }
   }
 
+  if(discount > 1) return res.status(400).json({msg: "Diskon tidak boleh lebih dari 100%"})
+
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = dirname(dirname(__filename));
   const uploadPath = path.join(__dirname, "uploads/product-image");
