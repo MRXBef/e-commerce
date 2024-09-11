@@ -94,6 +94,7 @@ export const addProduct = async (req, res) => {
       
       res.json({message: 'Produk berhasil diunggah!'});
     }).catch((err) => {
+      console.log(err)
       res.status(500).json({ message: 'Failed to upload files.', error: err.message });
     })
   } catch (error) {

@@ -40,7 +40,7 @@ const ProfilePage = () => {
   const [insertedProduct, setInsertedProduct] = useState({
     productName: "",
     productPrice: "",
-    productStock: 0,
+    productStock: "",
     productDiscount: 0,
     productDesc: "",
     productCategory: [],
@@ -67,16 +67,7 @@ const ProfilePage = () => {
       const response = await axiosJWT.get(
         `${import.meta.env.VITE_BASEURL}/user`
       );
-      setUser({
-        username: response.data.username,
-        email: response.data.email,
-        avatar: response.data.avatar,
-        balance: response.data.balance,
-        followings: response.data.followings,
-        followeds: response.data.followeds,
-        products: response.data.products,
-        carts: response.data.carts,
-      });
+      setUser({ ...response.data });
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
@@ -130,7 +121,7 @@ const ProfilePage = () => {
     });
 
     try {
-      const response = await axiosJWT.post(
+      await axiosJWT.post(
         `${import.meta.env.VITE_BASEURL}/product`,
         formData,
         {
@@ -141,7 +132,16 @@ const ProfilePage = () => {
       );
       setIsAddFormShow(false);
       fetchUserData();
-      console.log(response);
+      setInsertedProduct((prevState) => ({
+        ...prevState,
+        productName: "",
+        productPrice: "",
+        productStock: "",
+        productDiscount: 0,
+        productDesc: "",
+        productCategory: []
+      }))
+      setFiles([])
     } catch (error) {
       console.log(error.response);
     }
@@ -325,6 +325,7 @@ const ProfilePage = () => {
                   type: "text",
                   name: "productName",
                   event: handleInputChange,
+                  value: insertedProduct.productName,
                   iconColor: "var(--secondary-color)",
                   iconName: icon.cilPlus,
                   placeholder: "''",
@@ -338,6 +339,7 @@ const ProfilePage = () => {
                   type: "number",
                   name: "productPrice",
                   event: handleInputChange,
+                  value: insertedProduct.productPrice,
                   iconColor: "var(--secondary-color)",
                   iconName: icon.cilPlus,
                   placeholder: "0",
@@ -351,6 +353,7 @@ const ProfilePage = () => {
                   type: "number",
                   name: "productStock",
                   event: handleInputChange,
+                  value: insertedProduct.productStock,
                   iconColor: "var(--secondary-color)",
                   iconName: icon.cilPlus,
                   placeholder: "0",
@@ -364,6 +367,7 @@ const ProfilePage = () => {
                   type: "number",
                   name: "productDiscount",
                   event: handleInputChange,
+                  value: insertedProduct.productDiscount,
                   iconColor: "var(--secondary-color)",
                   iconName: icon.cilPlus,
                   placeholder: "0",
@@ -381,6 +385,7 @@ const ProfilePage = () => {
                 className="textarea"
                 id="textarea"
                 placeholder="Deskripsi Produk"
+                value={insertedProduct.productDesc}
                 style={{
                   backgroundColor: "#fff",
                   color: "#000",

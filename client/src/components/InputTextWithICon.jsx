@@ -45,6 +45,7 @@ const InputTextWithIcon = ({ args }) => {
           name={args.name}
           type={args.type || 'text'}
           placeholder={args.placeholder}
+          value={args.value}
           style={{
             width: "100%",
             height: "40px",
