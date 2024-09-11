@@ -191,6 +191,10 @@ export const changeAvatarProfile = async (req, res) => {
   const __dirname = dirname(dirname(__filename));
   const uploadPath = path.join(__dirname, "uploads/user-avatar");
 
+  if(!fs.existsSync(uploadPath)) {
+    fs.mkdirSync(uploadPath)
+  }
+
   try {
     const user = await Users.findOne({
       where: { username: req.username },
