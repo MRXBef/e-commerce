@@ -1,5 +1,5 @@
 import express from "express";
-import { register, getUserData, login, logout, getUserAvatar } from "../controllers/Users.js";
+import { register, getUserData, login, logout, getUserAvatar, changeAvatarProfile } from "../controllers/Users.js";
 import verifyToken from "../middleware/verifyToken.js";
 import { refreshToken } from "../controllers/RefreshToken.js";
 import { addProduct, getAllProduct, getProductImage } from "../controllers/Products.js";
@@ -18,6 +18,7 @@ router.get("/token", refreshToken);
 //users
 router.get("/user", verifyToken, getUserData);
 router.get('/user/avatar/:filename', getUserAvatar)
+router.post('/user/avatar', verifyToken, changeAvatarProfile)
 
 //products
 router.post('/product', verifyToken, addProduct)

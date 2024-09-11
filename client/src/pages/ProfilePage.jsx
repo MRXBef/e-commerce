@@ -48,7 +48,7 @@ const ProfilePage = () => {
   const [files, setFiles] = useState([]);
 
   //inisialisasi axios interceptors
-  const axiosJWT = axiosInterceptors({ expire, setToken, setExpire });
+  const axiosJWT = axiosInterceptors({ expire, token, setToken, setExpire });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -147,11 +147,34 @@ const ProfilePage = () => {
     }
   };
 
-  const handleAvatar = () => {
+  const handleShowAvatar = () => {
     if (user.avatar === null) {
       return avatar;
     }
     return `${import.meta.env.VITE_BASEURL}/user/avatar/${user.avatar}`;
+  };
+
+  const handleAvatarChange = async (e) => {
+    const selectedFile = e.target.files;
+    if (selectedFile.length < 1) return;
+
+    const formData = new FormData();
+    formData.append("image", selectedFile[0]);
+    formData.append("userFilename", user.avatar);
+    try {
+      const response = await axiosJWT.post(
+        `${import.meta.env.VITE_BASEURL}/user/avatar`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      fetchUserData();
+    } catch (error) {
+      console.log(error.response);
+    }
   };
 
   if (checkIsAuthorized) {
@@ -176,7 +199,7 @@ const ProfilePage = () => {
     return null;
   }
 
-  console.log(files[0]);
+  // console.log(files[0]);
 
   return (
     <div className="profile-container">
@@ -203,7 +226,19 @@ const ProfilePage = () => {
         <div className="content-container">
           <div className="profile-info-container">
             <div className="profile-avatar">
-              <img src={handleAvatar()} />
+              <input
+                type="file"
+                id="changeAvatar"
+                style={{ display: "none" }}
+                accept="image/*"
+                onChange={handleAvatarChange}
+              />
+              <label className="change-avatar-label" htmlFor="changeAvatar">
+                <i>
+                  <CIcon icon={icon.cilPen} />
+                </i>
+                <img src={handleShowAvatar()} />
+              </label>
             </div>
             <div className="profile-status">
               <div className="profile-biodata">
@@ -294,7 +329,7 @@ const ProfilePage = () => {
                   iconName: icon.cilPlus,
                   placeholder: "''",
                   label: "Nama Produk",
-                  borderColor: 'grey'
+                  borderColor: "grey",
                 }}
               />
               <InputTextWithICon
@@ -307,7 +342,7 @@ const ProfilePage = () => {
                   iconName: icon.cilPlus,
                   placeholder: "0",
                   label: "Harga Produk",
-                  borderColor: 'grey'
+                  borderColor: "grey",
                 }}
               />
               <InputTextWithICon
@@ -320,7 +355,7 @@ const ProfilePage = () => {
                   iconName: icon.cilPlus,
                   placeholder: "0",
                   label: "Stok Produk",
-                  borderColor: 'grey'
+                  borderColor: "grey",
                 }}
               />
               <InputTextWithICon
@@ -333,7 +368,7 @@ const ProfilePage = () => {
                   iconName: icon.cilPlus,
                   placeholder: "0",
                   label: "Diskon Produk (%)",
-                  borderColor: 'grey' 
+                  borderColor: "grey",
                 }}
               />
               <label
@@ -539,8 +574,7 @@ const ProfilePage = () => {
                       display: "flex",
                       justifyContent: "center",
                       flexWrap: "wrap",
-                      border:
-                        files.length > 0 ? "1px solid grey" : "",
+                      border: files.length > 0 ? "1px solid grey" : "",
                       borderRadius: "10px",
                     }}
                   >

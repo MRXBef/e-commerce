@@ -1,7 +1,7 @@
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 
-export const axiosInterceptors = ({ expire, setToken, setExpire }) => {
+export const axiosInterceptors = ({ expire, token, setToken, setExpire }) => {
   const axiosJWT = axios.create();
   axiosJWT.interceptors.request.use(
     async (config) => {
@@ -14,6 +14,8 @@ export const axiosInterceptors = ({ expire, setToken, setExpire }) => {
         setToken(response.data.accessToken);
         const decoded = jwtDecode(response.data.accessToken);
         setExpire(decoded.exp);
+      } else {
+        config.headers.Authorization = `Bearer ${token}`
       }
       return config;
     },

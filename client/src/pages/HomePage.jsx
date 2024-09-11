@@ -19,7 +19,7 @@ const HomePage = () => {
   const [products, setProducts] = useState([]);
 
   //inisialisasi axios interceptors
-  const axiosJWT = axiosInterceptors({ expire, setToken, setExpire });
+  const axiosJWT = axiosInterceptors({ expire, token, setToken, setExpire });
 
   useEffect(() => {
     refreshToken({setAuthorized, setCheckAuthorized, setExpire, setToken});

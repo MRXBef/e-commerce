@@ -50,7 +50,8 @@ const LoginPage = () => {
                 event: (e) => {setEmail(e.target.value)},
                 iconName: icon.cilEnvelopeClosed,
                 placeholder: "Email",
-                width: "75%"
+                width: "75%",
+                type: 'text'
               }}
             />
             <InputTextWithICon
@@ -58,7 +59,8 @@ const LoginPage = () => {
                 event: (e) => {setPassword(e.target.value)},
                 iconName: icon.cilLockLocked,
                 placeholder: "Password",
-                width: "75%"
+                width: "75%",
+                type: 'password'
               }}
             />
             <button type="submit">MASUK</button>

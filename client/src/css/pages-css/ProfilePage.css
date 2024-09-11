@@ -36,8 +36,23 @@
     padding: 20px;
 }
 
-.profile-avatar img {
+.change-avatar-label i {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color: #fff;
+}
+
+.change-avatar-label {
+    border-radius: 50%;
+    display: flex;
+    cursor: pointer;
+    position: relative;
+}
+
+.change-avatar-label img {
     width: 150px;
+    height: 150px;
     border-radius: 50%;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     object-fit: cover;

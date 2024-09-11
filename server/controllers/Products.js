@@ -51,7 +51,7 @@ export const addProduct = async (req, res) => {
       break;
     }
 
-    const fileName = `image_${Date.now()}_${index}.${image.mimetype.split('/')[1]}`
+    const fileName = `image_${Date.now()}_${req.userID}${index}.${image.mimetype.split('/')[1]}`
     const filePath = path.join(uploadPath, fileName)
     uploadPromises.push(new Promise((resolve, reject) => {
       image.mv(filePath, (err) => {

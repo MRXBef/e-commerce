@@ -42,9 +42,8 @@ const InputTextWithIcon = ({ args }) => {
 
         {/* Input */}
         <input
-          id="inputWithIcon"
           name={args.name}
-          type={args.type}
+          type={args.type || 'text'}
           placeholder={args.placeholder}
           style={{
             width: "100%",
