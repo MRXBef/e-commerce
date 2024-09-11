@@ -66,12 +66,12 @@ export const login = async (req, res) => {
     const accessToken = jwt.sign(
       { userId, emailSign, usernameSign, userAvatar },
       process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "15s" }
+      { expiresIn: "15m" }
     );
     const refreshToken = jwt.sign(
       { userId, emailSign, usernameSign, userAvatar },
       process.env.REFRESH_TOKEN_SECRET,
-      { expiresIn: "1d" }
+      { expiresIn: "7d" }
     );
 
     await Users.update(
@@ -82,7 +82,7 @@ export const login = async (req, res) => {
     );
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000,
+      maxAge: (24 * 7) * 60 * 60 * 1000,
       //secure: true,
       //sameSite: 'none'
 

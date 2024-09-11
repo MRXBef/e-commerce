@@ -5,6 +5,7 @@ import router from "./router/index.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import formParser from 'express-fileupload'
+import fileUpload from "express-fileupload";
 
 //import table
 import Users from "./models/userModel.js";
