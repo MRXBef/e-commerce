@@ -16,6 +16,7 @@ import * as icon from "@coreui/icons";
 import rupiahFormat from "../utils/rupiahFormat";
 import Card from "../components/Card";
 import InputTextWithICon from "../components/InputTextWithICon";
+import imageCompression from "browser-image-compression";
 
 const ProfilePage = () => {
   //auth state
@@ -97,9 +98,38 @@ const ProfilePage = () => {
     }
   };
 
-  const handleFileChange = (e) => {
-    const selectedFiles = e.target.files;
-    setFiles([...selectedFiles]);
+  const handleProductImageChange = (e) => {
+    const selectedFiles = Array.from(e.target.files);
+
+    const option = {
+      maxSizeKB: 200,
+      maxWidthOrHeight: 500,
+      useWebWorker: true,
+    };
+
+    let compressPromises = [];
+
+    try {
+      for (const file of selectedFiles) {
+        compressPromises.push(
+          imageCompression(file, option).then((compressedBlob) => {
+            const compressedFile = new File([compressedBlob], file.name, {
+              type: file.type,
+              lastModified: Date.now(),
+            });
+            return compressedFile;
+          })
+        );
+      }
+
+      Promise.all(compressPromises).then((compressedFiles) => {
+        compressedFiles.forEach((file) => {
+          setFiles((prevState) => [...prevState, file]);
+        });
+      });
+    } catch (error) {
+      console.error("Gagal mengkompress gambar", error);
+    }
   };
 
   const addProduct = async (e) => {
@@ -121,15 +151,11 @@ const ProfilePage = () => {
     });
 
     try {
-      await axiosJWT.post(
-        `${import.meta.env.VITE_BASEURL}/product`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      await axiosJWT.post(`${import.meta.env.VITE_BASEURL}/product`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       setIsAddFormShow(false);
       fetchUserData();
       setInsertedProduct((prevState) => ({
@@ -139,9 +165,9 @@ const ProfilePage = () => {
         productStock: "",
         productDiscount: 0,
         productDesc: "",
-        productCategory: []
-      }))
-      setFiles([])
+        productCategory: [],
+      }));
+      setFiles([]);
     } catch (error) {
       console.log(error.response);
     }
@@ -563,7 +589,7 @@ const ProfilePage = () => {
                   id="fileInput"
                   multiple
                   accept="image/*"
-                  onChange={handleFileChange}
+                  onChange={handleProductImageChange}
                   style={{ display: "none" }} // Menyembunyikan input asli
                 />
                 <div
@@ -585,7 +611,30 @@ const ProfilePage = () => {
                   >
                     {files.length > 0 &&
                       Array.from(files).map((file, index) => (
-                        <div key={index} style={{ margin: "10px" }}>
+                        <div
+                          key={index}
+                          style={{ margin: "10px", position: "relative" }}
+                        >
+                          <i
+                            style={{
+                              position: "absolute",
+                              top: "0",
+                              right: "0",
+                              cursor: 'pointer',
+                              background: 'linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7))',
+                              display: 'flex',
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                              color: '#fff'
+                            }}
+                            onClick={() => {
+                              setFiles((prevState) => 
+                                prevState.filter((file, idx) => idx !== index)
+                              )
+                            }}
+                          >
+                            <CIcon icon={icon.cilX}/>
+                          </i>
                           <img
                             src={URL.createObjectURL(file)}
                             alt={`preview ${index}`}
@@ -622,7 +671,7 @@ const ProfilePage = () => {
                   }}
                 >
                   <i>
-                    <CIcon icon={icon.cilImage} />
+                    <CIcon icon={icon.cilImagePlus} />
                   </i>
                 </label>
                 <button
