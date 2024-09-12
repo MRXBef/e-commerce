@@ -49,10 +49,10 @@ export const handleAvatarChange = async (e, user, axiosJWT, fetchUserData) => {
     option
   ).then((compressedBlob) => {
     const compressedFile = new File([compressedBlob], selectedFile[0].name, {
-        type: selectedFile[0].type,
-        lastModified: Date.now()
-    })
-    return compressedFile
+      type: selectedFile[0].type,
+      lastModified: Date.now(),
+    });
+    return compressedFile;
   });
 
   const formData = new FormData();
@@ -70,6 +70,51 @@ export const handleAvatarChange = async (e, user, axiosJWT, fetchUserData) => {
     );
     fetchUserData();
   } catch (error) {
-    console.error("Gagal mengupload avatar" ,error);
+    console.error("Gagal mengupload avatar", error);
   }
+};
+
+export const categoryData = () => {
+  return [
+    {
+      value: "elektronik",
+      label: "Elektronik",
+    },
+    {
+      value: "fashion",
+      label: "Fashion",
+    },
+    {
+      value: "kesehatan",
+      label: "Kesehatan",
+    },
+    {
+      value: "otomotif",
+      label: "Otomotif",
+    },
+    {
+      value: "bayi",
+      label: "Bayi",
+    },
+    {
+      value: "furniture",
+      label: "Furniture",
+    },
+    {
+      value: "mainan",
+      label: "Mainan",
+    },
+    {
+      value: "olahraga",
+      label: "Olahraga",
+    },
+    {
+      value: "perlengkapan-rumah",
+      label: "Perlengkapan Rumah",
+    },
+    {
+      value: "kebutuhan-harian",
+      label: "Kebutuhan Harian",
+    },
+  ];
 };

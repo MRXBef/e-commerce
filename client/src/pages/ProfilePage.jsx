@@ -9,6 +9,7 @@ import InputTextWithICon from "../components/InputTextWithICon";
 import PageLoader from "../components/PageLoader";
 import "../css/pages-css/ProfilePage.css";
 import {
+  categoryData,
   handleAvatarChange,
   handleProductImageChange,
 } from "../utils/profilePage";
@@ -51,7 +52,9 @@ const ProfilePage = () => {
 
   //inisialisasi axios interceptors
   const axiosJWT = axiosInterceptors({ expire, token, setToken, setExpire });
+
   const navigate = useNavigate();
+  const categories = categoryData();
 
   useEffect(() => {
     refreshToken({ setAuthorized, setCheckAuthorized, setExpire, setToken });
@@ -221,13 +224,13 @@ const ProfilePage = () => {
             </div>
             <div className="profile-menu">
               <h1>{rupiahFormat(user.balance)}</h1>
-              <i style={{ position: "relative" }}>
+              <i style={{ position: "relative", backgroundColor: "var(--warning-color)" }}>
                 <p
                   style={{
                     position: "absolute",
                     fontSize: "10px",
                     padding: "0px 6px 0px 6px",
-                    backgroundColor: "var(--warning-color)",
+                    backgroundColor: "var(--danger-color)",
                     borderRadius: "50%",
                     bottom: "-5px",
                     right: "-5px",
@@ -395,134 +398,21 @@ const ProfilePage = () => {
                     borderRadius: "10px",
                   }}
                 >
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="productCategory"
-                      checked={insertedProduct.productCategory.includes(
-                        "elektronik"
-                      )}
-                      onChange={handleInputChange}
-                      value="elektronik"
-                      style={{ marginRight: "10px" }}
-                    />
-                    Elektronik
-                  </label>
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="productCategory"
-                      checked={insertedProduct.productCategory.includes(
-                        "fashion"
-                      )}
-                      onChange={handleInputChange}
-                      value="fashion"
-                      style={{ marginRight: "10px" }}
-                    />
-                    Fashion
-                  </label>
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="productCategory"
-                      checked={insertedProduct.productCategory.includes(
-                        "kesehatan"
-                      )}
-                      onChange={handleInputChange}
-                      value="kesehatan"
-                      style={{ marginRight: "10px" }}
-                    />
-                    Kesehatan
-                  </label>
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="productCategory"
-                      checked={insertedProduct.productCategory.includes(
-                        "otomotif"
-                      )}
-                      onChange={handleInputChange}
-                      value="otomotif"
-                      style={{ marginRight: "10px" }}
-                    />
-                    Otomotif
-                  </label>
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="productCategory"
-                      checked={insertedProduct.productCategory.includes("bayi")}
-                      onChange={handleInputChange}
-                      value="bayi"
-                      style={{ marginRight: "10px" }}
-                    />
-                    Bayi
-                  </label>
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="productCategory"
-                      checked={insertedProduct.productCategory.includes(
-                        "furniture"
-                      )}
-                      onChange={handleInputChange}
-                      value="furniture"
-                      style={{ marginRight: "10px" }}
-                    />
-                    Furniture
-                  </label>
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="productCategory"
-                      checked={insertedProduct.productCategory.includes(
-                        "mainan"
-                      )}
-                      onChange={handleInputChange}
-                      value="mainan"
-                      style={{ marginRight: "10px" }}
-                    />
-                    Mainan
-                  </label>
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="productCategory"
-                      checked={insertedProduct.productCategory.includes(
-                        "olahraga"
-                      )}
-                      onChange={handleInputChange}
-                      value="olahraga"
-                      style={{ marginRight: "10px" }}
-                    />
-                    Olahraga
-                  </label>
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="productCategory"
-                      checked={insertedProduct.productCategory.includes(
-                        "perlengkapan-rumah"
-                      )}
-                      onChange={handleInputChange}
-                      value="perlengkapan-rumah"
-                      style={{ marginRight: "10px" }}
-                    />
-                    Perlengkapan Rumah
-                  </label>
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="productCategory"
-                      checked={insertedProduct.productCategory.includes(
-                        "kebutuhan-harian"
-                      )}
-                      onChange={handleInputChange}
-                      value="kebutuhan-harian"
-                      style={{ marginRight: "10px" }}
-                    />
-                    Kebutuhan Harian
-                  </label>
+                  {categories.map((category, index) => (
+                    <label key={index}>
+                      <input
+                        type="checkbox"
+                        name="productCategory"
+                        checked={insertedProduct.productCategory.includes(
+                          category.value
+                        )}
+                        onChange={handleInputChange}
+                        value={category.value}
+                        style={{ marginRight: "10px" }}
+                      />
+                      {category.label}
+                    </label>
+                  ))}
                 </div>
               </div>
 
@@ -534,7 +424,7 @@ const ProfilePage = () => {
                   multiple
                   accept="image/*"
                   onChange={(e) => handleProductImageChange(e, setFiles)}
-                  style={{ display: "none" }} // Menyembunyikan input asli
+                  style={{ display: "none" }}
                 />
                 <div
                   style={{

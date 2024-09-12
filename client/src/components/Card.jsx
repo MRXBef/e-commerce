@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import rupiahFormat from "../utils/rupiahFormat";
 import avatar from "../assets/img/avatar.png";
 import { useNavigate } from "react-router-dom";
@@ -10,20 +10,31 @@ const Card = ({ args }) => {
   const productPrice = parseInt(args.productPrice.replace(/[^0-9]/g, ""));
   const productDiscount = parseFloat(args.productDiscount);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 767);
+  const [isOptionVisible, setIsOptionVisible] = useState(false);
+  const boxRef = useRef(null);
+
+  const handleClickOutside = (event) => {
+    if (boxRef.current && !boxRef.current.contains(event.target)) {
+      setIsOptionVisible(false);
+    }
+  };
 
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 767);
     };
 
+    document.addEventListener("mousedown", handleClickOutside);
     window.addEventListener("resize", handleResize);
     return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
       window.removeEventListener("resize", handleResize);
     };
   }, []);
 
   return (
     <div
+      ref={boxRef}
       onClick={() => navigate(`/product/${args.productUuid}`)}
       style={{
         boxShadow:
@@ -49,12 +60,12 @@ const Card = ({ args }) => {
           style={{
             position: "absolute",
             top: 0,
-            right: 0,
+            right: "-10px",
             display: "flex",
             justifyContent: "center",
             padding: "5px",
-            backgroundColor: "var(--info-color)",
-            borderRadius: "5px",
+            background: "linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7))",
+            borderRadius: "50%",
             color: "#fff",
             cursor: "pointer",
             boxShadow:
@@ -62,10 +73,53 @@ const Card = ({ args }) => {
           }}
           onClick={(e) => {
             e.stopPropagation();
-            alert("edit");
+            setIsOptionVisible(!isOptionVisible);
           }}
         >
-          <CIcon icon={icon.cilPencil} />
+          {isOptionVisible && (
+            <div
+              onClick={(e) => e.stopPropagation()}
+              style={{
+                width: "100px",
+                backgroundColor: "#fff",
+                position: "absolute",
+                borderRadius: "10px 0px 10px 10px",
+                left: "-100px",
+                top: "10px",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: "5px",
+                padding: "10px 0px 10px 0px",
+                cursor: 'auto'
+              }}
+            >
+              <h1
+                style={{
+                  color: "var(--info-color)",
+                  fontStyle: "normal",
+                  fontWeight: "500",
+                  fontSize: "15px",
+                  cursor: 'pointer'
+                }}
+              >
+                Ubah
+              </h1>
+              <h1
+                style={{
+                  color: "var(--danger-color)",
+                  fontStyle: "normal",
+                  fontWeight: "500",
+                  fontSize: "15px",
+                  cursor: 'pointer'
+                }}
+              >
+                Hapus
+              </h1>
+            </div>
+          )}
+          <CIcon icon={icon.cilOptions} />
         </i>
       ) : (
         <img
