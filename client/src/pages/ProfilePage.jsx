@@ -1,22 +1,23 @@
+import * as icon from "@coreui/icons";
+import CIcon from "@coreui/icons-react";
 import React, { useEffect, useState } from "react";
-import "../css/pages-css/ProfilePage.css";
+import { useNavigate } from "react-router-dom";
+import avatar from "../assets/img/avatar.png";
+import Card from "../components/Card";
 import Header from "../components/Header";
+import InputTextWithICon from "../components/InputTextWithICon";
+import PageLoader from "../components/PageLoader";
+import "../css/pages-css/ProfilePage.css";
+import {
+  handleAvatarChange,
+  handleProductImageChange,
+} from "../utils/profilePage";
+import rupiahFormat from "../utils/rupiahFormat";
 import {
   axiosInterceptors,
   decodeToken,
   refreshToken,
 } from "../utils/tokenHandler";
-import PageLoader from "../components/PageLoader";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { jwtDecode } from "jwt-decode";
-import avatar from "../assets/img/avatar.png";
-import CIcon from "@coreui/icons-react";
-import * as icon from "@coreui/icons";
-import rupiahFormat from "../utils/rupiahFormat";
-import Card from "../components/Card";
-import InputTextWithICon from "../components/InputTextWithICon";
-import imageCompression from "browser-image-compression";
 
 const ProfilePage = () => {
   //auth state
@@ -98,40 +99,6 @@ const ProfilePage = () => {
     }
   };
 
-  const handleProductImageChange = (e) => {
-    const selectedFiles = Array.from(e.target.files);
-
-    const option = {
-      maxSizeKB: 200,
-      maxWidthOrHeight: 500,
-      useWebWorker: true,
-    };
-
-    let compressPromises = [];
-
-    try {
-      for (const file of selectedFiles) {
-        compressPromises.push(
-          imageCompression(file, option).then((compressedBlob) => {
-            const compressedFile = new File([compressedBlob], file.name, {
-              type: file.type,
-              lastModified: Date.now(),
-            });
-            return compressedFile;
-          })
-        );
-      }
-
-      Promise.all(compressPromises).then((compressedFiles) => {
-        compressedFiles.forEach((file) => {
-          setFiles((prevState) => [...prevState, file]);
-        });
-      });
-    } catch (error) {
-      console.error("Gagal mengkompress gambar", error);
-    }
-  };
-
   const addProduct = async (e) => {
     e.preventDefault();
 
@@ -180,29 +147,6 @@ const ProfilePage = () => {
     return `${import.meta.env.VITE_BASEURL}/user/avatar/${user.avatar}`;
   };
 
-  const handleAvatarChange = async (e) => {
-    const selectedFile = e.target.files;
-    if (selectedFile.length < 1) return;
-
-    const formData = new FormData();
-    formData.append("image", selectedFile[0]);
-    formData.append("userFilename", user.avatar);
-    try {
-      const response = await axiosJWT.post(
-        `${import.meta.env.VITE_BASEURL}/user/avatar`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      fetchUserData();
-    } catch (error) {
-      console.log(error.response);
-    }
-  };
-
   if (checkIsAuthorized) {
     return (
       <div
@@ -224,8 +168,6 @@ const ProfilePage = () => {
   if (!authorized) {
     return null;
   }
-
-  // console.log(files[0]);
 
   return (
     <div className="profile-container">
@@ -257,7 +199,9 @@ const ProfilePage = () => {
                 id="changeAvatar"
                 style={{ display: "none" }}
                 accept="image/*"
-                onChange={handleAvatarChange}
+                onChange={(e) =>
+                  handleAvatarChange(e, user, axiosJWT, fetchUserData)
+                }
               />
               <label className="change-avatar-label" htmlFor="changeAvatar">
                 <i>
@@ -589,7 +533,7 @@ const ProfilePage = () => {
                   id="fileInput"
                   multiple
                   accept="image/*"
-                  onChange={handleProductImageChange}
+                  onChange={(e) => handleProductImageChange(e, setFiles)}
                   style={{ display: "none" }} // Menyembunyikan input asli
                 />
                 <div
@@ -620,20 +564,21 @@ const ProfilePage = () => {
                               position: "absolute",
                               top: "0",
                               right: "0",
-                              cursor: 'pointer',
-                              background: 'linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7))',
-                              display: 'flex',
-                              justifyContent: 'center',
-                              alignItems: 'center',
-                              color: '#fff'
+                              cursor: "pointer",
+                              background:
+                                "linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7))",
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                              color: "#fff",
                             }}
                             onClick={() => {
-                              setFiles((prevState) => 
+                              setFiles((prevState) =>
                                 prevState.filter((file, idx) => idx !== index)
-                              )
+                              );
                             }}
                           >
-                            <CIcon icon={icon.cilX}/>
+                            <CIcon icon={icon.cilX} />
                           </i>
                           <img
                             src={URL.createObjectURL(file)}
