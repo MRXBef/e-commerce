@@ -185,49 +185,43 @@ export const deleteProduct = async (req, res) => {
   try {
     const product = await Products.findOne({
       where: {
-        [Op.and]: [
-          {uuid: uuid},
-          {user_id: req.userID}
-        ]
+        [Op.and]: [{ uuid: uuid }, { user_id: req.userID }],
       },
       include: [
         {
           model: Image,
-          as: 'images'
-        }
-      ]
+          as: "images",
+        },
+      ],
     });
     if (!product) return res.status(404).json({ msg: "product not found" });
 
-    let promises = []
-    const { images } = product
+    let promises = [];
+    const { images } = product;
 
-    for(const image of images) {
-      const filePath = path.join(imagePath, image.dataValues.file_name)
-      promises.push(new Promise((resolve, reject) => {
-        if(fs.existsSync(filePath)) {
+    for (const image of images) {
+      const filePath = path.join(imagePath, image.dataValues.file_name);
+      promises.push(
+        new Promise((resolve, reject) => {
           fs.rm(filePath, (err) => {
-            if(err) {
-              reject(`Gagal menghapus ${image.dataValues.file_name}`)
-            }else {
-              resolve(`Gambar ${image.dataValues.file_name} berhasil dihapus`)
+            if (err) {
+              reject(`Gagal menghapus ${image.dataValues.file_name}`);
+            } else {
+              resolve(`Gambar ${image.dataValues.file_name} berhasil dihapus`);
             }
-          })
-        }else {
-          reject(`File ${image.dataValues.file_name} tidak ditemukan`)
-        }
-      }))
+          });
+        })
+      );
     }
 
     try {
-      Promise.all(promises).then(async() => {
-        await product.destroy()
-        res.status(200).json({msg: `Berhasil menghapus ${product.name}`})
-      })
+      Promise.all(promises).then(async () => {
+        await product.destroy();
+        res.status(200).json({ msg: `Berhasil menghapus ${product.name}` });
+      });
     } catch (error) {
-      console.log(error.message)
+      console.log(error.message);
     }
-
   } catch (error) {
     console.log(error.message);
   }
