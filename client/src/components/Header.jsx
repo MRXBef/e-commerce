@@ -38,7 +38,7 @@ const Header = ({args}) => {
       <div className="personal-container">
         {args.isAuthorized ? (
           <button
-          onClick={() => navigate(`/mprofile/${args.token.usernameSign}`)}
+          onClick={() => navigate(`/mprofile`)}
           >
             <i style={{color: '#fff'}}>
               <CIcon icon={icon.cilUser}/>

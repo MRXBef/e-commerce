@@ -192,12 +192,16 @@ export const deleteProduct = async (req, res) => {
           model: Image,
           as: "images",
         },
+        {
+          model: Category,
+          as: "categories",
+        },
       ],
     });
     if (!product) return res.status(404).json({ msg: "product not found" });
 
     let promises = [];
-    const { images } = product;
+    const { images, categories } = product;
 
     for (const image of images) {
       const filePath = path.join(imagePath, image.dataValues.file_name);
@@ -216,6 +220,8 @@ export const deleteProduct = async (req, res) => {
 
     try {
       Promise.all(promises).then(async () => {
+        await Category.destroy({ where: { product_id: product.id } });
+        await Image.destroy({ where: { product_id: product.id } });
         await product.destroy();
         res.status(200).json({ msg: `Berhasil menghapus ${product.name}` });
       });

@@ -16,7 +16,7 @@ const InputTextWithIcon = ({ args }) => {
     >
       {/* Label */}
       <label
-        htmlFor="inputWithIcon"
+        htmlFor={args.name}
         style={{
           marginBottom: "5px",
           fontSize: "14px",
@@ -42,6 +42,7 @@ const InputTextWithIcon = ({ args }) => {
 
         {/* Input */}
         <input
+          id={args.name}
           name={args.name}
           type={args.type || 'text'}
           placeholder={args.placeholder}

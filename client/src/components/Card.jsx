@@ -64,7 +64,7 @@ const Card = ({ args }) => {
             display: "flex",
             justifyContent: "center",
             padding: "5px",
-            background: "linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7))",
+            background: "linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8))",
             borderRadius: "50%",
             color: "#fff",
             cursor: "pointer",
@@ -81,10 +81,10 @@ const Card = ({ args }) => {
               onClick={(e) => e.stopPropagation()}
               style={{
                 width: "100px",
-                backgroundColor: "#fff",
+                background: 'linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8))',
                 position: "absolute",
                 borderRadius: "10px 0px 10px 10px",
-                left: "-100px",
+                left: "-101px",
                 top: "10px",
                 display: "flex",
                 flexDirection: "column",
@@ -97,7 +97,7 @@ const Card = ({ args }) => {
             >
               <h1
                 style={{
-                  color: "var(--info-color)",
+                  color: "#fff",
                   fontStyle: "normal",
                   fontWeight: "500",
                   fontSize: "15px",
@@ -143,7 +143,6 @@ const Card = ({ args }) => {
             objectFit: "cover",
             right: "-10px",
             border: "2px solid var(--secondary-color)",
-            backgroundColor: "#fff",
             boxShadow:
               "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px",
           }}
@@ -197,7 +196,7 @@ const Card = ({ args }) => {
               <h1 style={{ color: "var(--primary-color)", fontWeight: "bold" }}>
                 {rupiahFormat(productPrice - productPrice * productDiscount)}
               </h1>
-              <p style={{ fontSize: "12px", textDecoration: "line-through" }}>
+              <p style={{ fontSize: "12px", color: "var(--secondary-color)", fontWeight: '500', textDecoration: "line-through" }}>
                 {rupiahFormat(productPrice)}
               </p>
             </>
