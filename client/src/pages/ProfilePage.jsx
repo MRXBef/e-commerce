@@ -150,6 +150,16 @@ const ProfilePage = () => {
     return `${import.meta.env.VITE_BASEURL}/user/avatar/${user.avatar}`;
   };
 
+  const handleDeleteProduct = async(product) => {
+    if(!confirm("Ingin Menghapus Product ini?")) return
+    try {
+      const response = await axiosJWT.delete(`${import.meta.env.VITE_BASEURL}/product/${product.uuid}`)
+      fetchUserData()
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   if (checkIsAuthorized) {
     return (
       <div
@@ -270,6 +280,7 @@ const ProfilePage = () => {
                   productDiscount: product.discount,
                   productUuid: product.uuid,
                   productOwner: product.owner,
+                  deleteProduct: () => handleDeleteProduct(product)
                 }}
               />
             ))}

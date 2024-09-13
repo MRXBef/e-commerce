@@ -107,6 +107,7 @@ const Card = ({ args }) => {
                 Ubah
               </h1>
               <h1
+                onClick={args.deleteProduct}
                 style={{
                   color: "var(--danger-color)",
                   fontStyle: "normal",

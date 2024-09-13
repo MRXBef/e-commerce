@@ -2,7 +2,7 @@ import express from "express";
 import { register, getUserData, login, logout, getUserAvatar, changeAvatarProfile } from "../controllers/Users.js";
 import verifyToken from "../middleware/verifyToken.js";
 import { refreshToken } from "../controllers/RefreshToken.js";
-import { addProduct, getAllProduct, getProductImage } from "../controllers/Products.js";
+import { addProduct, deleteProduct, getAllProduct, getProductImage } from "../controllers/Products.js";
 import getPublicId from "../middleware/getPublicId.js";
 
 const router = express.Router();
@@ -22,6 +22,7 @@ router.post('/user/avatar', verifyToken, changeAvatarProfile)
 
 //products
 router.post('/product', verifyToken, addProduct)
+router.delete('/product/:uuid', verifyToken, deleteProduct)
 router.get('/product/', getPublicId, getAllProduct)
 router.get('/product/image/:filename', getProductImage)
 
