@@ -1,7 +1,6 @@
 import jwt from "jsonwebtoken";
 
 const verifyToken = async (req, res, next) => {
-  console.log(req.files)
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
   if (token == null) return res.sendStatus(401);

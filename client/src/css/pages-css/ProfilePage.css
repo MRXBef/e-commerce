@@ -34,6 +34,7 @@
     justify-content: center;
     align-items: center;
     padding: 20px;
+    /* background-color: yellow; */
 }
 
 .change-avatar-label i {
@@ -70,6 +71,7 @@
     display: flex;
     flex-direction: column;
     gap: 5px;
+    /* background-color: red; */
 }
 .profile-biodata {
     display: flex;
@@ -94,7 +96,6 @@
     gap: 10px;
     padding: 10px;
     /* background-color: #000; */
-    z-index: -999;
 }
 
 .profile-menu h1 {
@@ -174,7 +175,7 @@
     align-items: center;
 }
 .form-add-container form {
-    width: 60%;
+    width: 30%;
     height: 80vh;
     background-color: #fff;
     border-radius: 10px;
@@ -201,10 +202,12 @@
     }
     .profile-avatar {
         width: 100%;
+        z-index: 999;
     }
     .profile-status {
         width: 100%;
         align-items: center;
+        z-index: 999;
     }
     .profile-biodata {
         align-items: center;
@@ -213,6 +216,9 @@
     .profile-menu {
         /* background-color: #000; */
         height: 100%;
+    }
+    .profile-menu i {
+        z-index: 999;
     }
     .profile-menu h1 {
         position: absolute;

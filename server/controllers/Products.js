@@ -24,11 +24,18 @@ export const addProduct = async (req, res) => {
       .json({ msg: "Maksimal gambar yang boleh di unggah sebanyak 5 gambar" });
   }
 
-  const { name, description, price, category, stock, discount } = req.body;
-  const requiredFields = { name, description, price, category };
+  const { name, price, stock, discount, description, category } = req.body;
+  const fieldLabels = {
+    name: "Nama Produk",
+    price: "Harga Produk",
+    description: "Deskripsi Produk",
+    category: "Kategori Produk",
+  }
+  const requiredFields = { name, price, description, category };
   for (const key in requiredFields) {
     if (requiredFields[key] === undefined || requiredFields[key] === "") {
-      return res.status(400).json({ msg: `${key} dibutuhkan!` });
+      const fieldLabel = fieldLabels[key]
+      return res.status(400).json({ msg: `${fieldLabel} Dibutuhkan!` });
     }
   }
 
@@ -102,13 +109,13 @@ export const addProduct = async (req, res) => {
           });
         }
 
-        res.json({ message: "Produk berhasil diunggah!" });
+        res.json({ msg: "Produk berhasil diunggah!" });
       })
       .catch((err) => {
         console.log(err);
         res
           .status(500)
-          .json({ message: "Failed to upload files.", error: err.message });
+          .json({ msg: "Failed to upload files.", error: err.message });
       });
   } catch (error) {
     console.log(error.message);

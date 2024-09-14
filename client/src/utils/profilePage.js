@@ -27,6 +27,7 @@ export const handleProductImageChange = (e, setFiles) => {
     Promise.all(compressPromises).then((compressedFiles) => {
       compressedFiles.forEach((file) => {
         setFiles((prevState) => [...prevState, file]);
+        e.target.value = ''
       });
     });
   } catch (error) {

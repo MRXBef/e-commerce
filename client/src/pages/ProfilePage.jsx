@@ -1,6 +1,6 @@
 import * as icon from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import avatar from "../assets/img/avatar.png";
 import Card from "../components/Card";
@@ -19,6 +19,7 @@ import {
   decodeToken,
   refreshToken,
 } from "../utils/tokenHandler";
+import { Alert } from "../components/Alert";
 
 const ProfilePage = () => {
   //auth state
@@ -48,6 +49,12 @@ const ProfilePage = () => {
     productDesc: "",
     productCategory: [],
   });
+  const [alert, setAlert] = useState({
+    status: false,
+    message: "",
+    isSuccess: false,
+  });
+  const timeoutRef = useRef(null);
   const [files, setFiles] = useState([]);
 
   //inisialisasi axios interceptors
@@ -61,11 +68,25 @@ const ProfilePage = () => {
     fetchUserData();
   }, []);
 
-  useEffect(() => {
-    if (!authorized && !checkIsAuthorized) {
-      navigate("/login");
+  const handleShowAlert = (msg, isSuccess) => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
     }
-  }, [authorized, checkIsAuthorized, navigate]);
+    setAlert((prevState) => ({
+      ...prevState,
+      message: msg,
+      isSuccess,
+      status: true,
+    }));
+
+    timeoutRef.current = setTimeout(() => {
+      setAlert((prevState) => ({
+        ...prevState,
+        status: false,
+      }));
+      timeoutRef.current = null;
+    }, 5000);
+  };
 
   const fetchUserData = async () => {
     try {
@@ -121,11 +142,15 @@ const ProfilePage = () => {
     });
 
     try {
-      await axiosJWT.post(`${import.meta.env.VITE_BASEURL}/product`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const response = await axiosJWT.post(
+        `${import.meta.env.VITE_BASEURL}/product`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
       setIsAddFormShow(false);
       fetchUserData();
       setInsertedProduct((prevState) => ({
@@ -138,8 +163,9 @@ const ProfilePage = () => {
         productCategory: [],
       }));
       setFiles([]);
+      handleShowAlert(response.data.msg, true);
     } catch (error) {
-      console.log(error.response);
+      handleShowAlert(error.response.data.msg)
     }
   };
 
@@ -150,15 +176,17 @@ const ProfilePage = () => {
     return `${import.meta.env.VITE_BASEURL}/user/avatar/${user.avatar}`;
   };
 
-  const handleDeleteProduct = async(product) => {
-    if(!confirm("Ingin Menghapus Product ini?")) return
+  const handleDeleteProduct = async (product) => {
+    if (!confirm("Ingin Menghapus Product ini?")) return;
     try {
-      const response = await axiosJWT.delete(`${import.meta.env.VITE_BASEURL}/product/${product.uuid}`)
-      fetchUserData()
+      const response = await axiosJWT.delete(
+        `${import.meta.env.VITE_BASEURL}/product/${product.uuid}`
+      );
+      fetchUserData();
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
+  };
 
   if (checkIsAuthorized) {
     return (
@@ -190,6 +218,15 @@ const ProfilePage = () => {
           token: decodeToken(token),
         }}
       />
+
+      <Alert
+        args={{
+          status: alert.status,
+          message: alert.message,
+          isSuccess: alert.isSuccess
+        }}
+      />
+
       {isLoading ? (
         <div
           style={{
@@ -234,7 +271,12 @@ const ProfilePage = () => {
             </div>
             <div className="profile-menu">
               <h1>{rupiahFormat(user.balance)}</h1>
-              <i style={{ position: "relative", backgroundColor: "var(--warning-color)" }}>
+              <i
+                style={{
+                  position: "relative",
+                  backgroundColor: "var(--warning-color)",
+                }}
+              >
                 <p
                   style={{
                     position: "absolute",
@@ -280,7 +322,7 @@ const ProfilePage = () => {
                   productDiscount: product.discount,
                   productUuid: product.uuid,
                   productOwner: product.owner,
-                  deleteProduct: () => handleDeleteProduct(product)
+                  deleteProduct: () => handleDeleteProduct(product),
                 }}
               />
             ))}
