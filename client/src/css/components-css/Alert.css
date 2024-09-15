@@ -7,9 +7,9 @@
     z-index: 9999999;
     left: 50%;
     transform: translate(-50%, -50%);
-    top: 120px;
+    top: 125px;
     border-radius: 10px;
-    transition: all 0.2s;
+    transition: top 0.2s;
     padding: 10px;
     display: flex;
     flex-direction: column;
@@ -38,21 +38,22 @@
 
 .confirm-alert {
     width: 25%;
-    height: 200px;
+    height: auto;
     border-radius: 10px;
     background-color: #fff;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 10px;
-    padding: 10px;
+    gap: 20px;
+    padding: 40px 20px 40px 20px;
 }
 
 .confirm-alert h1 {
     font-weight: 500;
     font-size: 18px;
     color: #000;
+    text-align: center;
 }
 
 .confirm-alert div {

@@ -49,48 +49,18 @@ const ProfilePage = () => {
     productDesc: "",
     productCategory: [],
   });
-  const [alert, setAlert] = useState({
-    status: false,
-    message: "",
-    isSuccess: false,
-  });
-  const timeoutRef = useRef(null);
   const [files, setFiles] = useState([]);
-  const [confirmAlert, setConfirmAlert] = useState({
-    show: false,
-    msg: "",
-    confirm: null,
-  });
 
-  //inisialisasi axios interceptors
   const axiosJWT = axiosInterceptors({ expire, token, setToken, setExpire });
   const navigate = useNavigate();
   const categories = categoryData();
+  const { handleShowAlert, AlertComponent } = Alert();
+  const { handleConfirmation, ConfirmAlertComponent } = ConfirmAlert();
 
   useEffect(() => {
     refreshToken({ setAuthorized, setCheckAuthorized, setExpire, setToken });
     fetchUserData();
   }, []);
-
-  const handleShowAlert = (msg, isSuccess) => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-    setAlert((prevState) => ({
-      ...prevState,
-      message: msg,
-      isSuccess,
-      status: true,
-    }));
-
-    timeoutRef.current = setTimeout(() => {
-      setAlert((prevState) => ({
-        ...prevState,
-        status: false,
-      }));
-      timeoutRef.current = null;
-    }, 5000);
-  };
 
   const fetchUserData = async () => {
     try {
@@ -127,7 +97,7 @@ const ProfilePage = () => {
     }
   };
 
-  const addProduct = async (e) => {
+  const handleAddProduct = async (e) => {
     e.preventDefault();
 
     //mengubah array category menjadi format koma
@@ -181,7 +151,7 @@ const ProfilePage = () => {
   };
 
   const handleDeleteProduct = async (product) => {
-    const isConfirmed = await confirmAlert__handleConfirmation(
+    const isConfirmed = await handleConfirmation(
       `Apakah anda yakin ingin menghapus produk ini?`
     );
 
@@ -196,31 +166,6 @@ const ProfilePage = () => {
     } catch (error) {
       handleShowAlert(error.response.data.msg);
     }
-  };
-
-  const confirmAlert__handleConfirmation = (msg) => {
-    return new Promise((resolve) => {
-      setConfirmAlert({
-        show: true,
-        msg: msg,
-        confirm: (result) => resolve(result),
-      });
-    });
-  };
-
-  const confirmAlert__handleButtonClicked = (e) => {
-    const { name } = e.currentTarget;
-
-    setConfirmAlert((prevState) => {
-      const updatedState = { ...prevState, msg: "", show: false };
-
-      // Panggil fungsi confirm dari state sebelumnya
-      if (prevState.confirm) {
-        prevState.confirm(name === "confirm");
-      }
-
-      return updatedState;
-    });
   };
 
   if (checkIsAuthorized) {
@@ -255,21 +200,9 @@ const ProfilePage = () => {
         }}
       />
 
-      <Alert
-        args={{
-          status: alert.status,
-          message: alert.message,
-          isSuccess: alert.isSuccess,
-        }}
-      />
+      <AlertComponent />
 
-      <ConfirmAlert
-        args={{
-          confirmAlert: confirmAlert,
-          setConfirmAlert: setConfirmAlert,
-          handleClickedConfirm: confirmAlert__handleButtonClicked,
-        }}
-      />
+      <ConfirmAlertComponent />
       {/* GLOBAL COMPONENT END */}
 
       {isLoading ? (
@@ -380,7 +313,7 @@ const ProfilePage = () => {
               isAddFormShow ? `` : `form-add-container-hidden`
             }`}
           >
-            <form onClick={(e) => e.stopPropagation()} onSubmit={addProduct}>
+            <form onClick={(e) => e.stopPropagation()} onSubmit={handleAddProduct}>
               <h1
                 style={{
                   fontSize: "17px",
