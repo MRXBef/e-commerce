@@ -19,7 +19,7 @@ import {
   decodeToken,
   refreshToken,
 } from "../utils/tokenHandler";
-import { Alert } from "../components/Alert";
+import { Alert, ConfirmAlert } from "../components/Alert";
 
 const ProfilePage = () => {
   //auth state
@@ -56,10 +56,14 @@ const ProfilePage = () => {
   });
   const timeoutRef = useRef(null);
   const [files, setFiles] = useState([]);
+  const [confirmAlert, setConfirmAlert] = useState({
+    show: false,
+    msg: "",
+    confirm: null,
+  });
 
   //inisialisasi axios interceptors
   const axiosJWT = axiosInterceptors({ expire, token, setToken, setExpire });
-
   const navigate = useNavigate();
   const categories = categoryData();
 
@@ -165,7 +169,7 @@ const ProfilePage = () => {
       setFiles([]);
       handleShowAlert(response.data.msg, true);
     } catch (error) {
-      handleShowAlert(error.response.data.msg)
+      handleShowAlert(error.response.data.msg);
     }
   };
 
@@ -177,15 +181,46 @@ const ProfilePage = () => {
   };
 
   const handleDeleteProduct = async (product) => {
-    if (!confirm("Ingin Menghapus Product ini?")) return;
+    const isConfirmed = await confirmAlert__handleConfirmation(
+      `Apakah anda yakin ingin menghapus produk ini?`
+    );
+
+    if (!isConfirmed) return;
+
     try {
       const response = await axiosJWT.delete(
         `${import.meta.env.VITE_BASEURL}/product/${product.uuid}`
       );
       fetchUserData();
+      handleShowAlert(response.data.msg, true);
     } catch (error) {
-      console.error(error);
+      handleShowAlert(error.response.data.msg);
     }
+  };
+
+  const confirmAlert__handleConfirmation = (msg) => {
+    return new Promise((resolve) => {
+      setConfirmAlert({
+        show: true,
+        msg: msg,
+        confirm: (result) => resolve(result),
+      });
+    });
+  };
+
+  const confirmAlert__handleButtonClicked = (e) => {
+    const { name } = e.currentTarget;
+
+    setConfirmAlert((prevState) => {
+      const updatedState = { ...prevState, msg: "", show: false };
+
+      // Panggil fungsi confirm dari state sebelumnya
+      if (prevState.confirm) {
+        prevState.confirm(name === "confirm");
+      }
+
+      return updatedState;
+    });
   };
 
   if (checkIsAuthorized) {
@@ -212,6 +247,7 @@ const ProfilePage = () => {
 
   return (
     <div className="profile-container">
+      {/* GLOBAL COMPONENT START */}
       <Header
         args={{
           isAuthorized: authorized,
@@ -223,9 +259,18 @@ const ProfilePage = () => {
         args={{
           status: alert.status,
           message: alert.message,
-          isSuccess: alert.isSuccess
+          isSuccess: alert.isSuccess,
         }}
       />
+
+      <ConfirmAlert
+        args={{
+          confirmAlert: confirmAlert,
+          setConfirmAlert: setConfirmAlert,
+          handleClickedConfirm: confirmAlert__handleButtonClicked,
+        }}
+      />
+      {/* GLOBAL COMPONENT END */}
 
       {isLoading ? (
         <div

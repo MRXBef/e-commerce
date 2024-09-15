@@ -11,7 +11,7 @@ import { imagePath } from "./Directory.js";
 
 export const addProduct = async (req, res) => {
   if (!req.files || !req.files.image) {
-    return res.status(400).json({ msg: "Tidak ada gambar yang di unggah!" });
+    return res.status(400).json({ msg: "Tidak ada gambar yang di pilih!" });
   }
 
   if (!Array.isArray(req.files.image)) {
@@ -35,7 +35,7 @@ export const addProduct = async (req, res) => {
   for (const key in requiredFields) {
     if (requiredFields[key] === undefined || requiredFields[key] === "") {
       const fieldLabel = fieldLabels[key]
-      return res.status(400).json({ msg: `${fieldLabel} Dibutuhkan!` });
+      return res.status(400).json({ msg: `${fieldLabel} dibutuhkan!` });
     }
   }
 
@@ -89,8 +89,8 @@ export const addProduct = async (req, res) => {
           name: name,
           description: description,
           price: price,
-          stock: stock ?? 0,
-          discount: discount ?? 0,
+          stock: stock || 0,
+          discount: discount || 0,
           user_id: req.userID,
         });
 
@@ -230,7 +230,7 @@ export const deleteProduct = async (req, res) => {
         await Category.destroy({ where: { product_id: product.id } });
         await Image.destroy({ where: { product_id: product.id } });
         await product.destroy();
-        res.status(200).json({ msg: `Berhasil menghapus ${product.name}` });
+        res.status(200).json({ msg: `Berhasil menghapus produk` });
       });
     } catch (error) {
       console.log(error.message);
