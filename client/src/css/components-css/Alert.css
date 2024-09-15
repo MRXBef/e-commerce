@@ -9,7 +9,7 @@
     transform: translate(-50%, -50%);
     top: 125px;
     border-radius: 10px;
-    transition: top 0.2s;
+    transition: all 0.2s;
     padding: 10px;
     display: flex;
     flex-direction: column;
