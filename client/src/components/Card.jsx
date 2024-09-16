@@ -81,7 +81,8 @@ const Card = ({ args }) => {
               onClick={(e) => e.stopPropagation()}
               style={{
                 width: "100px",
-                background: 'linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8))',
+                // background: 'linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8))',
+                backgroundColor: '#fff',
                 position: "absolute",
                 borderRadius: "10px 0px 10px 10px",
                 left: "-101px",
@@ -92,16 +93,16 @@ const Card = ({ args }) => {
                 alignItems: "center",
                 gap: "5px",
                 padding: "10px 0px 10px 0px",
-                cursor: 'auto'
+                cursor: 'auto',
+                boxShadow: "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px",
               }}
             >
               <h1
                 style={{
-                  color: "#fff",
+                  color: "var(--secondary-color)",
                   fontStyle: "normal",
-                  fontWeight: "500",
-                  fontSize: "15px",
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  fontWeight: '500'
                 }}
               >
                 Ubah
@@ -111,9 +112,8 @@ const Card = ({ args }) => {
                 style={{
                   color: "var(--danger-color)",
                   fontStyle: "normal",
-                  fontWeight: "500",
-                  fontSize: "15px",
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  fontWeight: '500'
                 }}
               >
                 Hapus

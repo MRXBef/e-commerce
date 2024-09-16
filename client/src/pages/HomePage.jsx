@@ -12,7 +12,7 @@ const HomePage = () => {
   //auth state
   const [authorized, setAuthorized] = useState(false);
   const [checkIsAuthorized, setCheckAuthorized] = useState(true);
-  const [token, setToken] = useState(null);
+  const [token, setToken] = useState('');
   const [expire, setExpire] = useState(0);
 
   //root state

@@ -99,6 +99,7 @@
 }
 
 .profile-menu h1 {
+    min-width: 150px;
     height: 35px;
     font-size: 15px;
     font-weight: 500;
@@ -113,6 +114,7 @@
 }
 
 .profile-menu i {
+    position: relative;
     height: 35px;
     color: #fff;
     cursor: pointer;
@@ -123,6 +125,37 @@
     background-color: var(--info-color);
     border-radius: 5px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+}
+
+.setting-control {
+    /* width: 90px; */
+    padding: 20px;
+    height: 100px;
+    /* background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)); */
+    background-color: #fff;
+    position: absolute;
+    top: 50px;
+    right: 0px;
+    border-radius: 10px 0px 10px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    cursor: auto;
+    font-size: 15px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+}
+
+.setting-control button {
+    display: flex;
+    justify-content: center;
+    color: var(--secondary-color);
+    font-weight: 500;
+}
+
+.setting-control-hidden {
+    display: none;
 }
 
 .product-title-container {

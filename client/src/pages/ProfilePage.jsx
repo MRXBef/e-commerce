@@ -1,6 +1,7 @@
 import * as icon from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 import React, { useEffect, useRef, useState } from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import avatar from "../assets/img/avatar.png";
 import Card from "../components/Card";
@@ -25,7 +26,7 @@ const ProfilePage = () => {
   //auth state
   const [authorized, setAuthorized] = useState(false);
   const [checkIsAuthorized, setCheckAuthorized] = useState(true);
-  const [token, setToken] = useState(null);
+  const [token, setToken] = useState("");
   const [expire, setExpire] = useState(0);
 
   //this state
@@ -50,17 +51,48 @@ const ProfilePage = () => {
     productCategory: [],
   });
   const [files, setFiles] = useState([]);
+  const [isSettingVisible, setIsSettingVisible] = useState(false);
 
   const axiosJWT = axiosInterceptors({ expire, token, setToken, setExpire });
   const navigate = useNavigate();
   const categories = categoryData();
   const { handleShowAlert, AlertComponent } = Alert();
   const { handleConfirmation, ConfirmAlertComponent } = ConfirmAlert();
+  const settingBoxRef = useRef(null);
+  const settingIconRef = useRef(null);
 
   useEffect(() => {
+    // Panggil refreshToken untuk memperbarui token saat halaman di-mount
     refreshToken({ setAuthorized, setCheckAuthorized, setExpire, setToken });
-    fetchUserData();
-  }, []);
+
+    // Jika authorized, fetch data user
+    if (authorized) {
+      fetchUserData();
+    }
+
+    // Jika pengecekan sudah selesai dan user tidak terauthorized, arahkan ke login
+    if (!authorized && !checkIsAuthorized) {
+      navigate("/login");
+    }
+
+    // Tambahkan event listener untuk mengecek klik di luar setting box
+    document.addEventListener("mousedown", handleClickOutsideSettingBox);
+
+    // Cleanup untuk menghapus event listener ketika komponen di-unmount
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutsideSettingBox);
+    };
+  }, [authorized, checkIsAuthorized, navigate]);
+
+  const handleClickOutsideSettingBox = (event) => {
+    if (
+      !settingBoxRef.current ||
+      (!settingBoxRef.current.contains(event.target) &&
+        !settingIconRef.current.contains(event.target))
+    ) {
+      setIsSettingVisible(false);
+    }
+  };
 
   const fetchUserData = async () => {
     try {
@@ -70,8 +102,9 @@ const ProfilePage = () => {
       setUser({ ...response.data });
       setIsLoading(false);
     } catch (error) {
+      console.error(error);
       setIsLoading(false);
-      console.log(error.response);
+      handleShowAlert(error.response.data.msg, false);
     }
   };
 
@@ -139,7 +172,7 @@ const ProfilePage = () => {
       setFiles([]);
       handleShowAlert(response.data.msg, true);
     } catch (error) {
-      handleShowAlert(error.response.data.msg);
+      handleShowAlert(error.response.data.msg, false);
     }
   };
 
@@ -164,7 +197,19 @@ const ProfilePage = () => {
       fetchUserData();
       handleShowAlert(response.data.msg, true);
     } catch (error) {
-      handleShowAlert(error.response.data.msg);
+      handleShowAlert(error.response.data.msg, false);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      const response = await axios.delete(
+        `${import.meta.env.VITE_BASEURL}/logout`
+      );
+      handleShowAlert(response.data.msg, true);
+      navigate("/login");
+    } catch (error) {
+      handleShowAlert(error.response.data.msg, false);
     }
   };
 
@@ -270,7 +315,25 @@ const ProfilePage = () => {
                 </p>
                 <CIcon icon={icon.cilCart} />
               </i>
-              <i>
+              <i
+                ref={settingIconRef}
+                onClick={() => setIsSettingVisible(!isSettingVisible)}
+              >
+                <div
+                  ref={settingBoxRef}
+                  className={`setting-control ${
+                    isSettingVisible ? "" : "setting-control-hidden"
+                  }`}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <button>Pengaturan akun</button>
+                  <button
+                    onClick={handleLogout}
+                    style={{ color: "var(--danger-color)" }}
+                  >
+                    Keluar
+                  </button>
+                </div>
                 <CIcon icon={icon.cilSettings} />
               </i>
             </div>
@@ -313,7 +376,10 @@ const ProfilePage = () => {
               isAddFormShow ? `` : `form-add-container-hidden`
             }`}
           >
-            <form onClick={(e) => e.stopPropagation()} onSubmit={handleAddProduct}>
+            <form
+              onClick={(e) => e.stopPropagation()}
+              onSubmit={handleAddProduct}
+            >
               <h1
                 style={{
                   fontSize: "17px",

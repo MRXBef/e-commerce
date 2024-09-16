@@ -5,18 +5,18 @@ export const refreshToken = async (req, res) => {
   const token = req.cookies.refreshToken;
 
   if (!token) {
-    return res.status(200).json({ accessToken: null, isPublicUser: true });
+    return res.status(200).json({ accessToken: '', isPublicUser: true });
   }
 
   try {
     const user = await Users.findOne({ where: { refreshToken: token } });
     if (!user) {
-      return res.status(200).json({ accessToken: null, isPublicUser: true });
+      return res.status(200).json({ accessToken: '', isPublicUser: true });
     }
 
     jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
       if (err) {
-        return res.status(200).json({ accessToken: null, isPublicUser: true });
+        return res.status(200).json({ accessToken: '', isPublicUser: true });
       }
 
       const userID = user.id;

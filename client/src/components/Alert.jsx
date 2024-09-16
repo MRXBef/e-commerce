@@ -120,7 +120,7 @@ export const ConfirmAlert = () => {
             <button
               name="reject"
               onClick={handleButtonClicked}
-              style={{ backgroundColor: "var(--danger-color)" }}
+              style={{ backgroundColor: "var(--primary-color)" }}
             >
               <i>
                 <CIcon icon={icon.cilX} />
@@ -129,7 +129,7 @@ export const ConfirmAlert = () => {
             <button
               name="confirm"
               onClick={handleButtonClicked}
-              style={{ backgroundColor: "var(--success-color)" }}
+              style={{ backgroundColor: "var(--secondary-color)" }}
             >
               <i>
                 <CIcon icon={icon.cilCheck} />
