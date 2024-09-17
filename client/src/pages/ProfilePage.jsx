@@ -25,7 +25,7 @@ import { Alert, ConfirmAlert } from "../components/Alert";
 const ProfilePage = () => {
   //auth state
   const [authorized, setAuthorized] = useState(false);
-  const [checkIsAuthorized, setCheckAuthorized] = useState(true);
+  const [checkAuthorized, setCheckAuthorized] = useState(true);
   const [token, setToken] = useState("");
   const [expire, setExpire] = useState(0);
 
@@ -71,7 +71,7 @@ const ProfilePage = () => {
     }
 
     // Jika pengecekan sudah selesai dan user tidak terauthorized, arahkan ke login
-    if (!authorized && !checkIsAuthorized) {
+    if (!authorized && !checkAuthorized) {
       navigate("/login");
     }
 
@@ -82,7 +82,7 @@ const ProfilePage = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutsideSettingBox);
     };
-  }, [authorized, checkIsAuthorized, navigate]);
+  }, [authorized, checkAuthorized, navigate]);
 
   const handleClickOutsideSettingBox = (event) => {
     if (
@@ -132,11 +132,9 @@ const ProfilePage = () => {
 
   const handleAddProduct = async (e) => {
     e.preventDefault();
-
     //mengubah array category menjadi format koma
     const categoryFormat = insertedProduct.productCategory.join(",");
     const discountFormat = insertedProduct.productDiscount / 100;
-
     const formData = new FormData();
     formData.append("name", insertedProduct.productName);
     formData.append("price", insertedProduct.productPrice);
@@ -213,7 +211,7 @@ const ProfilePage = () => {
     }
   };
 
-  if (checkIsAuthorized) {
+  if (checkAuthorized) {
     return (
       <div
         style={{
@@ -236,7 +234,7 @@ const ProfilePage = () => {
   }
 
   return (
-    <div className="profile-container">
+    <div className="page-container">
       {/* GLOBAL COMPONENT START */}
       <Header
         args={{

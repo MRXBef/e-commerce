@@ -11,7 +11,7 @@ import { jwtDecode } from "jwt-decode";
 const HomePage = () => {
   //auth state
   const [authorized, setAuthorized] = useState(false);
-  const [checkIsAuthorized, setCheckAuthorized] = useState(true);
+  const [checkAuthorized, setCheckAuthorized] = useState(true);
   const [token, setToken] = useState('');
   const [expire, setExpire] = useState(0);
 
@@ -39,7 +39,7 @@ const HomePage = () => {
     }
   };
 
-  if (checkIsAuthorized) {
+  if (checkAuthorized) {
     return (
       <div
         style={{
@@ -57,7 +57,7 @@ const HomePage = () => {
   }
 
   return (
-    <div className="homepage-container">
+    <div className="page-container">
       <Header args={{
         isAuthorized: authorized,
         token: decodeToken(token)

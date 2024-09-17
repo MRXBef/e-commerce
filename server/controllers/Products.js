@@ -149,7 +149,7 @@ export const getAllProduct = async (req, res) => {
           { user_id: { [Op.not]: null } },
         ],
       },
-      limit: 20,
+      // limit: 20,
     });
 
     const newProducts = products.map((product) => {
@@ -173,6 +173,43 @@ export const getAllProduct = async (req, res) => {
     res.status(500).json({ msg: "Internal server error" });
   }
 };
+
+export const getProductByUuid = async(req, res) => {
+  const {product_uuid} = req.params
+  if(!product_uuid) {
+    return res.status(400).json({msg: "product uuid required"})
+  }
+
+  try {
+    const product = await Products.findOne({
+      where: {uuid: product_uuid},
+      attributes: ['uuid', 'name', 'description', 'price', 'stock', 'discount'],
+      include: [
+        {
+          model: Users,
+          as: 'user',
+          required: true,
+          attributes: ['username', 'avatar']
+        },
+        {
+          model: Image,
+          as: 'images',
+          required: true,
+          attributes: ['file_name'],
+        }
+      ],
+    })
+
+    const productJSON = product.toJSON()
+    
+    // console.log(productJSON)
+    res.status(200).json(productJSON)
+  } catch (error) {
+    console.log(error.message)
+  }
+
+    
+}
 
 export const getProductImage = (req, res) => {
   const filename = req.params["filename"];
