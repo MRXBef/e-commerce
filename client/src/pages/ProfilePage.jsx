@@ -343,7 +343,7 @@ const ProfilePage = () => {
               <CIcon icon={icon.cilPlus} />
             </i>
           </div>
-          <div className="product-container">
+          <div className="myproduct-container">
             {user.products.map((product, index) => (
               <Card
                 key={index}
