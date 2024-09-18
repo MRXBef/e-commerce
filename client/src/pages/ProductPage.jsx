@@ -1,9 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { axiosInterceptors, decodeToken, refreshToken } from "../utils/tokenHandler";
+import "../css/pages-css/ProductPage.css";
+import {
+  axiosInterceptors,
+  decodeToken,
+  refreshToken,
+} from "../utils/tokenHandler";
 import PageLoader from "../components/PageLoader";
 import Header from "../components/Header";
 import axios from "axios";
+import CIcon from "@coreui/icons-react";
+import * as icon from "@coreui/icons";
 
 const ProductPage = () => {
   const [token, setToken] = useState("");
@@ -11,23 +18,52 @@ const ProductPage = () => {
   const [authorized, setAuthorized] = useState(false);
   const [checkAuthorized, setCheckAuthorized] = useState(true);
   const { product_uuid } = useParams();
+  const [isProductLoading, setIsProductLoading] = useState(true);
+  const [product, setProduct] = useState({
+    name: "",
+    description: "",
+    price: 0,
+    discount: 0,
+    stock: 0,
+    user: {},
+    images: [],
+  });
+  const [indexOfImagesShowed, setIndexOfImagesShowed] = useState(0);
 
   const axiosJWT = axiosInterceptors({ token, setToken, expire, setExpire });
 
   useEffect(() => {
     refreshToken({ setAuthorized, setCheckAuthorized, setToken, setExpire });
-    fetchProductData()
-    
+    fetchProductData();
   }, []);
 
-  const fetchProductData = async() => {
+  const fetchProductData = async () => {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_BASEURL}/product/${product_uuid}`)
-      console.log(response)
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASEURL}/product/${product_uuid}`
+      );
+      // console.log(response)
+      setProduct({ ...response.data });
+      setIsProductLoading(false);
     } catch (error) {
-      console.log(error.response)
+      console.log(error.response);
     }
-  }
+  };
+
+  const handleArrowClicked = (event) => {
+    const { name } = event.currentTarget.dataset;
+
+    if (
+      (indexOfImagesShowed <= 0 && name === "left") ||
+      (indexOfImagesShowed >= product.images.length - 1 && name === "right")
+    ) {
+      return;
+    }
+
+    name === "left"
+      ? setIndexOfImagesShowed(indexOfImagesShowed - 1)
+      : setIndexOfImagesShowed(indexOfImagesShowed + 1);
+  };
 
   if (checkAuthorized) {
     return (
@@ -46,109 +82,56 @@ const ProductPage = () => {
     );
   }
 
+  console.log(product);
+
   return (
     <div className="page-container">
-      <Header 
+      <Header
         args={{
           isAuthorized: authorized,
-          token: decodeToken(token)
+          token: decodeToken(token),
         }}
       />
-      <div className="content-container">
-        {product_uuid}
-      </div>
+
+      {isProductLoading ? (
+        <div
+          style={{
+            width: "100%",
+            height: "100vh",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <PageLoader />
+        </div>
+      ) : (
+        <div className="content-container">
+          <div className="product-container">
+            <div className="images-container">
+              <i data-name="left" onClick={handleArrowClicked}>
+                <CIcon icon={icon.cilArrowLeft} />
+              </i>
+              <img
+                src={`${import.meta.env.VITE_BASEURL}/product/image/${
+                  product.images[indexOfImagesShowed].file_name
+                }`}
+                alt="Product Image"
+                style={{ pointerEvents: "none" }}
+              />
+              <i data-name="right" onClick={handleArrowClicked}>
+                <CIcon icon={icon.cilArrowRight} />
+              </i>
+              <div className="index-of-images">
+                <h1>{indexOfImagesShowed + 1}/{product.images.length}</h1>
+              </div>
+            </div>
+            <div className="info-container"></div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
 export default ProductPage;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import React, { useState } from "react";
-
-// const ProductPage = () => {
-//   const itemColor = ["red", "green", "blue", "orange"];
-//   const [colorIndex, setColorIndex] = useState(0);
-
-//   const handleButtonClicked = (e) => {
-//     const { name } = e.target;
-//     if (
-//       (colorIndex <= 0 && name === "left") ||
-//       (colorIndex >= itemColor.length - 1 && name === "right")
-//     )
-//       return;
-//     name === "right"
-//       ? setColorIndex(colorIndex + 1)
-//       : setColorIndex(colorIndex - 1);
-//   };
-//   return (
-//     <div
-//       style={{
-//         width: "100%",
-//         minHeight: "100vh",
-//         display: "flex",
-//         justifyContent: "center",
-//         alignItems: "center",
-//         gap: "10px",
-//       }}
-//     >
-//       <button
-//         style={{ color: "black" }}
-//         onClick={handleButtonClicked}
-//         name="left"
-//       >
-//         Left
-//       </button>
-//       <div
-//         style={{
-//           width: "500px",
-//           height: "500px",
-//           backgroundColor: "black",
-//           display: "flex",
-//           justifyContent: "center",
-//           alignItems: "center",
-//         }}
-//       >
-//         <div
-//           style={{
-//             backgroundColor: itemColor[colorIndex],
-//             width: "90%",
-//             height: "90%",
-//           }}
-//         ></div>
-//       </div>
-//       <button
-//         style={{ color: "black" }}
-//         onClick={handleButtonClicked}
-//         name="right"
-//       >
-//         Right
-//       </button>
-//     </div>
-//   );
-// };
-
-// export default ProductPage;
