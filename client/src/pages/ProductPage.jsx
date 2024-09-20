@@ -11,6 +11,7 @@ import Header from "../components/Header";
 import axios from "axios";
 import CIcon from "@coreui/icons-react";
 import * as icon from "@coreui/icons";
+import rupiahFormat from "../utils/rupiahFormat";
 
 const ProductPage = () => {
   const [token, setToken] = useState("");
@@ -123,10 +124,39 @@ const ProductPage = () => {
                 <CIcon icon={icon.cilArrowRight} />
               </i>
               <div className="index-of-images">
-                <h1>{indexOfImagesShowed + 1}/{product.images.length}</h1>
+                <h1>
+                  {indexOfImagesShowed + 1}/{product.images.length}
+                </h1>
               </div>
             </div>
-            <div className="info-container"></div>
+            <div className="info-container">
+              <div className="price-and-sold">
+                {product.discount > 0 ? (
+                  <>
+                    <div>
+                      <h1>
+                        {rupiahFormat(
+                          product.price - product.price * product.discount
+                        )}
+                      </h1>
+                      <h1 style={{ textDecoration: "line-through" }}>
+                        {rupiahFormat(product.price)}
+                      </h1>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div>
+                      <h1>{rupiahFormat(product.price)}</h1>
+                    </div>
+                  </>
+                )}
+                <h1>{product.transactions.length} Terjual</h1>
+              </div>
+              <div className="product-name">
+                <h1>{product.name}</h1>
+              </div>
+            </div>
           </div>
         </div>
       )}

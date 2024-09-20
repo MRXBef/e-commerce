@@ -7,6 +7,7 @@ import Image from "../models/imageModel.js";
 import Category from "../models/categoryModel.js";
 import { Op } from "sequelize";
 import Users from "../models/userModel.js";
+import Transaction from "../models/transactionModel.js";
 import { imagePath } from "./Directory.js";
 
 export const addProduct = async (req, res) => {
@@ -196,6 +197,11 @@ export const getProductByUuid = async(req, res) => {
           as: 'images',
           required: true,
           attributes: ['file_name'],
+        },
+        {
+          model: Transaction,
+          as: 'transactions',
+          attributes: ['uuid']
         }
       ],
     })
