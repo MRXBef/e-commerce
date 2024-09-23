@@ -1,6 +1,6 @@
 .product-container {
     width: 100%;
-    height: 30vh;
+    /* height: 30vh; */
     display: flex;
     justify-content: center;
     /* align-items: center; */
@@ -47,7 +47,7 @@
     position: absolute;
     padding: 0;
     width: auto;
-    top: 3%;
+    top: 0%;
     right: 3%;
 }
 
@@ -155,6 +155,19 @@
 .owner-container h1 {
     color: #000;
     font-weight: 500;
+}
+
+.description-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.description-container h1 {
+    padding: 10px;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
 }
 
 @media (max-width: 767px)  {

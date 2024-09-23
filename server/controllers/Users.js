@@ -167,6 +167,7 @@ export const getUserData = async (req, res) => {
           as: "carts",
         },
       ],
+      order: [[{ model: Products, as: "products" }, 'createdAt', 'DESC']],
     });
 
     res.status(200).json({ ...user.dataValues });
@@ -178,7 +179,7 @@ export const getUserData = async (req, res) => {
 
 export const changeAvatarProfile = async (req, res) => {
   const { image } = req.files;
-  if (!image) return res.status(400).json({ msg: "Must upload a image" });
+  if (!image) return res.status(400).json({ msg: "Kamu harus mengunggah gambar!" });
   const { userFilename } = req.body;
   const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
   if (!allowedTypes.includes(image.mimetype)) {

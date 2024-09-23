@@ -172,6 +172,17 @@ const ProductPage = () => {
                 />
                 <h1>@{product.user.username}</h1>
               </div>
+              <div className="description-container">
+                <h1 style={{color: '#000', fontWeight: '500'}}>Deskripsi Produk</h1>
+                <h1 style={{color: '#000'}}>
+                  {product.description.split("\n").map((line, index) => (
+                    <React.Fragment key={index}>
+                      {line}
+                      <br />
+                    </React.Fragment>
+                  ))}
+                </h1>
+              </div>
             </div>
           </div>
         </div>
