@@ -202,6 +202,11 @@ export const getProductByUuid = async(req, res) => {
           model: Transaction,
           as: 'transactions',
           attributes: ['uuid']
+        },
+        {
+          model: Category,
+          as: 'categories',
+          attributes: ['name']
         }
       ],
     })

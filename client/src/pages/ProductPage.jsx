@@ -123,6 +123,9 @@ const ProductPage = () => {
               <i data-name="right" onClick={handleArrowClicked}>
                 <CIcon icon={icon.cilArrowRight} />
               </i>
+              <i>
+                <CIcon icon={icon.cilCart} />
+              </i>
               <div className="index-of-images">
                 <h1>
                   {indexOfImagesShowed + 1}/{product.images.length}
@@ -155,6 +158,19 @@ const ProductPage = () => {
               </div>
               <div className="product-name">
                 <h1>{product.name}</h1>
+              </div>
+              <div className="product-category">
+                {product.categories.map((category, index) => (
+                  <div key={index}>{category.name.toUpperCase()}</div>
+                ))}
+              </div>
+              <div className="owner-container">
+                <img
+                  src={`${import.meta.env.VITE_BASEURL}/user/avatar/${
+                    product.user.avatar
+                  }`}
+                />
+                <h1>@{product.user.username}</h1>
               </div>
             </div>
           </div>
