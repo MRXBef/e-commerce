@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "../css/pages-css/ProductPage.css";
 import {
   axiosInterceptors,
@@ -12,6 +12,7 @@ import axios from "axios";
 import CIcon from "@coreui/icons-react";
 import * as icon from "@coreui/icons";
 import rupiahFormat from "../utils/rupiahFormat";
+import { Alert } from "../components/Alert";
 
 const ProductPage = () => {
   const [token, setToken] = useState("");
@@ -32,6 +33,8 @@ const ProductPage = () => {
   const [indexOfImagesShowed, setIndexOfImagesShowed] = useState(0);
 
   const axiosJWT = axiosInterceptors({ token, setToken, expire, setExpire });
+  const navigate = useNavigate()
+  const {AlertComponent, handleShowAlert} = Alert()
 
   useEffect(() => {
     refreshToken({ setAuthorized, setCheckAuthorized, setToken, setExpire });
@@ -66,6 +69,22 @@ const ProductPage = () => {
       : setIndexOfImagesShowed(indexOfImagesShowed + 1);
   };
 
+  const handleCartClicked = async () => {
+    try {
+      const response = await axiosJWT.post(`${import.meta.env.VITE_BASEURL}/cart`, {
+        productUuid: product.uuid,
+        productOwner: product.user.username
+      })
+      console.log(response)
+      handleShowAlert(response.data.msg, true)
+    } catch (error) {
+      if(error.response.status === 401) {
+        navigate('/login')
+      }
+      handleShowAlert(error.response.data.msg, false)
+    }
+  }
+
   if (checkAuthorized) {
     return (
       <div
@@ -93,6 +112,8 @@ const ProductPage = () => {
           token: decodeToken(token),
         }}
       />
+
+      <AlertComponent/>
 
       {isProductLoading ? (
         <div
@@ -123,7 +144,7 @@ const ProductPage = () => {
               <i data-name="right" onClick={handleArrowClicked}>
                 <CIcon icon={icon.cilArrowRight} />
               </i>
-              <i>
+              <i onClick={handleCartClicked}>
                 <CIcon icon={icon.cilCart} />
               </i>
               <div className="index-of-images">

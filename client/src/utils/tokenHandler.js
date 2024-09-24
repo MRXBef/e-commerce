@@ -10,10 +10,12 @@ export const axiosInterceptors = ({ expire, token, setToken, setExpire }) => {
         const response = await axios.get(
           `${import.meta.env.VITE_BASEURL}/token`
         );
-        config.headers.Authorization = `Bearer ${response.data.accessToken}`;
-        setToken(response.data.accessToken);
-        const decoded = jwtDecode(response.data.accessToken);
-        setExpire(decoded.exp);
+        if(!response.data.isPublicUser){
+          config.headers.Authorization = `Bearer ${response.data.accessToken}`;
+          setToken(response.data.accessToken);
+          const decoded = jwtDecode(response.data.accessToken);
+          setExpire(decoded.exp);
+        }
       } else {
         config.headers.Authorization = `Bearer ${token}`
       }
