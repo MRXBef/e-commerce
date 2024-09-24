@@ -127,12 +127,31 @@
     margin-top: 10px;
 }
 
-.product-category div {
+.buy-now {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--primary-color);
+    padding: 5px 10px 5px 10px;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    gap: 5px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+}
+
+.buy-now i {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.category {
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: var(--secondary-color);
-    padding: 5px;
+    padding: 5px 10px 5px 10px;
     color: #fff;
     cursor: pointer;
 }

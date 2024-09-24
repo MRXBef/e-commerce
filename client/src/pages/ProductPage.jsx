@@ -46,7 +46,6 @@ const ProductPage = () => {
       const response = await axios.get(
         `${import.meta.env.VITE_BASEURL}/product/${product_uuid}`
       );
-      // console.log(response)
       setProduct({ ...response.data });
       setIsProductLoading(false);
     } catch (error) {
@@ -75,8 +74,23 @@ const ProductPage = () => {
         productUuid: product.uuid,
         productOwner: product.user.username
       })
-      console.log(response)
       handleShowAlert(response.data.msg, true)
+    } catch (error) {
+      if(error.response.status === 401) {
+        navigate('/login')
+      }
+      handleShowAlert(error.response.data.msg, false)
+    }
+  }
+
+  const handleBuyNow = async() => {
+    try {
+      const response = await axiosJWT.post(`${import.meta.env.VITE_BASEURL}/transaction`, {
+        productUuid: product.uuid
+      })
+      if(response.status === 200) {
+
+      }
     } catch (error) {
       if(error.response.status === 401) {
         navigate('/login')
@@ -139,7 +153,6 @@ const ProductPage = () => {
                   product.images[indexOfImagesShowed].file_name
                 }`}
                 alt="Product Image"
-                style={{ pointerEvents: "none" }}
               />
               <i data-name="right" onClick={handleArrowClicked}>
                 <CIcon icon={icon.cilArrowRight} />
@@ -181,8 +194,14 @@ const ProductPage = () => {
                 <h1>{product.name}</h1>
               </div>
               <div className="product-category">
+                <div className="buy-now" onClick={handleBuyNow}>
+                  <h1>Beli Sekarang</h1>
+                  <i>
+                    <CIcon icon={icon.cilCheck}/>
+                  </i>
+                </div>
                 {product.categories.map((category, index) => (
-                  <div key={index}>{category.name.toUpperCase()}</div>
+                  <div className="category" key={index}>{category.name.toUpperCase()}</div>
                 ))}
               </div>
               <div className="owner-container">

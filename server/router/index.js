@@ -5,6 +5,7 @@ import { refreshToken } from "../controllers/RefreshToken.js";
 import { addProduct, deleteProduct, getAllProduct, getProductByUuid, getProductImage } from "../controllers/Products.js";
 import getPublicId from "../middleware/getPublicId.js";
 import { handleAddCart } from "../controllers/Carts.js";
+import { createBuyNowToken } from "../controllers/Transactions.js";
 
 const router = express.Router();
 
@@ -28,7 +29,11 @@ router.get('/product/', getPublicId, getAllProduct)
 router.get('/product/:product_uuid', getProductByUuid)
 router.get('/product/image/:filename', getProductImage)
 
-//cart
+//carts
 router.post('/cart', verifyToken, handleAddCart)
+
+//transactions
+router.post("/transaction", verifyToken, createBuyNowToken)
+
 
 export default router;
