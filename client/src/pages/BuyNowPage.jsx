@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { decodeToken, refreshToken } from "../utils/tokenHandler";
+import { axiosInterceptors, decodeToken, refreshToken } from "../utils/tokenHandler";
 import axios from "axios";
 import PageLoader from "../components/PageLoader";
 import { useNavigate } from "react-router-dom";
@@ -16,6 +16,7 @@ const BuyNowPage = () => {
   const [checkBuyNowToken, setCheckBuyNowToken] = useState(true);
 
   const navigate = useNavigate();
+  const axiosJWT = axiosInterceptors({token, setToken, expire, setExpire})
 
   useEffect(() => {
     refreshToken({ setAuthorized, setCheckAuthorized, setExpire, setToken });
@@ -39,11 +40,14 @@ const BuyNowPage = () => {
       setBuyNowToken(response.data.buyNowToken);
       setCheckBuyNowToken(false);
     } catch (error) {
+      if(error.response.status === 403) {
+        navigate(-1)
+      }
       console.log(error.response);
     }
   };
 
-  if (checkAuthorized && checkBuyNowToken) {
+  if (checkAuthorized || checkBuyNowToken) {
     return (
       <div
         style={{
