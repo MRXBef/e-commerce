@@ -110,6 +110,7 @@ export const logout = async (req, res) => {
     await Users.update({ refreshToken: null }, { where: { id: user.id } });
     res
       .clearCookie("refreshToken")
+      .clearCookie("buyNow")
       .status(200)
       .json({ msg: "Berhasil keluar!" });
   } catch (error) {

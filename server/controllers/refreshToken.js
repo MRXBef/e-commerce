@@ -1,6 +1,7 @@
 import Users from "../models/userModel.js";
 import jwt from "jsonwebtoken";
 
+//this function for auth token refreshing
 export const refreshToken = async (req, res) => {
   const token = req.cookies.refreshToken;
 
@@ -36,3 +37,16 @@ export const refreshToken = async (req, res) => {
     res.status(500).json({ msg: "Internal server error" });
   }
 };
+
+export const refreshBuyNowToken = async (req, res) => {
+  const token = req.cookies.buyNow
+  if(!token) {
+    return res.status(400).json({msg: "Tidak ada token!"})
+  }
+
+  jwt.verify(token, process.env.BUYNOW_TOKEN_SECRET, (err, decoded) => {
+    if(err) return res.sendStatus(403)
+
+    res.status(200).json({buyNowToken: token})
+  })
+}

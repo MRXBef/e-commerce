@@ -89,7 +89,7 @@ const ProductPage = () => {
         productUuid: product.uuid
       })
       if(response.status === 200) {
-
+        navigate('/buy-now')
       }
     } catch (error) {
       if(error.response.status === 401) {

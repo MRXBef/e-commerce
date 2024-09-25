@@ -3,7 +3,9 @@ import jwt from "jsonwebtoken";
 
 export const createBuyNowToken = async (req, res) => {
   const { productUuid } = req.body;
-  //   console.log(productUuid)
+  if(!productUuid) {
+    return res.status(404).json({ msg: "Produk uuid dibutuhkan" });
+  }
   try {
     const product = await Products.findOne({
       where: { uuid: productUuid },
@@ -13,10 +15,15 @@ export const createBuyNowToken = async (req, res) => {
       return res.status(404).json({ msg: "Produk tidak ditemukan!" });
     }
 
+    const payload = {
+      productData: {...product.toJSON()},
+      buyerId: req.userID
+    }
+
     const buyNowToken = jwt.sign(
-      { ...product.toJSON() },
+      payload,
       process.env.BUYNOW_TOKEN_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: "1d" }
     );
     
     res.cookie("buyNow", buyNowToken, {

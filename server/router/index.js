@@ -1,7 +1,7 @@
 import express from "express";
 import { register, getUserData, login, logout, getUserAvatar, changeAvatarProfile } from "../controllers/Users.js";
 import verifyToken from "../middleware/verifyToken.js";
-import { refreshToken } from "../controllers/RefreshToken.js";
+import { refreshBuyNowToken, refreshToken } from "../controllers/RefreshToken.js";
 import { addProduct, deleteProduct, getAllProduct, getProductByUuid, getProductImage } from "../controllers/Products.js";
 import getPublicId from "../middleware/getPublicId.js";
 import { handleAddCart } from "../controllers/Carts.js";
@@ -34,6 +34,7 @@ router.post('/cart', verifyToken, handleAddCart)
 
 //transactions
 router.post("/transaction", verifyToken, createBuyNowToken)
+router.get('/transaction/token', refreshBuyNowToken)
 
 
 export default router;
