@@ -28,13 +28,14 @@ export const axiosInterceptors = ({ expire, token, setToken, setExpire }) => {
   return axiosJWT;
 };
 
-export const refreshToken = async ({ setAuthorized, setCheckAuthorized, setExpire, setToken }) => {
+export const refreshToken = async ({ setAuthorized, setCheckAuthorized, setExpire, setToken, setIsPublicUser }) => {
   //kode ini bertujuan untuk mengetahui yang mengakses web itu public user atau verifyd user
   try {
     const response = await axios.get(`${import.meta.env.VITE_BASEURL}/token`);
     if (response.data.isPublicUser) {
       setAuthorized(false);
       setCheckAuthorized(false);
+      setIsPublicUser(true)
     } else {
       setExpire(jwtDecode(response.data.accessToken).exp);
       setAuthorized(true);

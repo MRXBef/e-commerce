@@ -12,7 +12,7 @@ const BuyNowPage = () => {
   const [expire, setExpire] = useState(0);
 
   //this page state
-  const [buyNowToken, setBuyNowToken] = useState("");
+  const [buyNowData, setBuyNowData] = useState({});
   const [checkBuyNowToken, setCheckBuyNowToken] = useState(true);
 
   const navigate = useNavigate();
@@ -26,21 +26,17 @@ const BuyNowPage = () => {
     } else if (!authorized && !checkAuthorized) {
       navigate("/login");
     }
-
-    if (!checkBuyNowToken) {
-      console.log(decodeToken(buyNowToken));
-    }
-  }, [authorized, checkAuthorized, checkBuyNowToken, navigate]);
+  }, [authorized, checkAuthorized, navigate]);
 
   const refreshBuyNowToken = async () => {
     try {
       const response = await axios.get(
         `${import.meta.env.VITE_BASEURL}/transaction/token`
       );
-      setBuyNowToken(response.data.buyNowToken);
+      setBuyNowData(decodeToken(response.data.buyNowToken));
       setCheckBuyNowToken(false);
     } catch (error) {
-      if(error.response.status === 403) {
+      if(error.response.status === 403) { 
         navigate(-1)
       }
       console.log(error.response);
@@ -63,6 +59,8 @@ const BuyNowPage = () => {
       </div>
     );
   }
+
+  console.log(buyNowData)
 
   return <div>BuyNowPage</div>;
 };

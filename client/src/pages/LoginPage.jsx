@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../css/pages-css/LoginPage.css";
 import loginHero from "../assets/img/login-hero.png";
 import logoProduct from "../assets/img/logo-product.png";
@@ -6,10 +6,18 @@ import axios from "axios";
 import InputTextWithICon from "../components/InputTextWithICon";
 import * as icon from "@coreui/icons";
 import { useNavigate } from "react-router-dom";
+import { refreshToken } from "../utils/tokenHandler";
+import PageLoader from "../components/PageLoader";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const [token, setToken] = useState("");
+  const [expire, setExpire] = useState(0);
+  const [isPublicUser, setIsPublicUser] = useState(false);
+  const [authorized, setAuthorized] = useState(false);
+  const [checkAuthorized, setCheckAuthorized] = useState(true);
 
   const navigate = useNavigate();
 
@@ -25,12 +33,37 @@ const LoginPage = () => {
         }
       );
       if (response) {
-        navigate("/");
+        window.history.length >= 3 ? navigate(-1) : navigate("/");
       }
     } catch (error) {
       console.log(error.response.data.msg);
     }
   };
+
+  useEffect(() => {
+    refreshToken({ setToken, setExpire, setAuthorized, setCheckAuthorized, setIsPublicUser });
+
+    if(authorized && !checkAuthorized) {
+      navigate("/")
+    }
+  }, [authorized, checkAuthorized, navigate]);
+
+  if (checkAuthorized || authorized) {
+    return (
+      <div
+        style={{
+          width: "100%",
+          height: "100vh",
+          backgroundColor: "#fff",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <PageLoader />
+      </div>
+    );
+  }
 
   return (
     <div className="login-container">
@@ -47,20 +80,24 @@ const LoginPage = () => {
             </div>
             <InputTextWithICon
               args={{
-                event: (e) => {setEmail(e.target.value)},
+                event: (e) => {
+                  setEmail(e.target.value);
+                },
                 iconName: icon.cilEnvelopeClosed,
                 placeholder: "Email",
                 width: "75%",
-                type: 'text'
+                type: "text",
               }}
             />
             <InputTextWithICon
               args={{
-                event: (e) => {setPassword(e.target.value)},
+                event: (e) => {
+                  setPassword(e.target.value);
+                },
                 iconName: icon.cilLockLocked,
                 placeholder: "Password",
                 width: "75%",
-                type: 'password'
+                type: "password",
               }}
             />
             <button type="submit">MASUK</button>

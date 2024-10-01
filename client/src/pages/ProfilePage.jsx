@@ -28,6 +28,7 @@ const ProfilePage = () => {
   const [checkAuthorized, setCheckAuthorized] = useState(true);
   const [token, setToken] = useState("");
   const [expire, setExpire] = useState(0);
+  const [isPublicUser, setIsPublicUser] = useState(false)
 
   //this state
   const [user, setUser] = useState({
@@ -63,7 +64,7 @@ const ProfilePage = () => {
 
   useEffect(() => {
     // Panggil refreshToken untuk memperbarui token saat halaman di-mount
-    refreshToken({ setAuthorized, setCheckAuthorized, setExpire, setToken });
+    refreshToken({ setAuthorized, setCheckAuthorized, setExpire, setToken, setIsPublicUser });
 
     // Jika authorized, fetch data user
     if (authorized) {
@@ -229,7 +230,7 @@ const ProfilePage = () => {
   }
 
   // Jangan render halaman jika tidak authorized (taruh di halaman khusus untuk user yang sudah ter authorized)
-  if (!authorized) {
+  if (!authorized && !isPublicUser) {
     return null;
   }
 

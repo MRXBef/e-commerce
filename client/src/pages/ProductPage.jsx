@@ -17,6 +17,7 @@ import { Alert } from "../components/Alert";
 const ProductPage = () => {
   const [token, setToken] = useState("");
   const [expire, setExpire] = useState(0);
+  const [isPublicUser, setIsPublicUser] = useState(false)
   const [authorized, setAuthorized] = useState(false);
   const [checkAuthorized, setCheckAuthorized] = useState(true);
   const { product_uuid } = useParams();
@@ -37,7 +38,7 @@ const ProductPage = () => {
   const {AlertComponent, handleShowAlert} = Alert()
 
   useEffect(() => {
-    refreshToken({ setAuthorized, setCheckAuthorized, setToken, setExpire });
+    refreshToken({ setAuthorized, setCheckAuthorized, setToken, setExpire, setIsPublicUser });
     fetchProductData();
   }, []);
 
@@ -86,7 +87,8 @@ const ProductPage = () => {
   const handleBuyNow = async() => {
     try {
       const response = await axiosJWT.post(`${import.meta.env.VITE_BASEURL}/transaction`, {
-        productUuid: product.uuid
+        productUuid: product.uuid,
+        productOwner: product.user.username
       })
       if(response.status === 200) {
         navigate('/buy-now')
@@ -114,6 +116,10 @@ const ProductPage = () => {
         <PageLoader />
       </div>
     );
+  }
+
+  if(!authorized && !isPublicUser) {
+    return null
   }
 
   console.log(product);

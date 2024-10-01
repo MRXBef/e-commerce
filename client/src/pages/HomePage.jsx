@@ -12,6 +12,7 @@ const HomePage = () => {
   //auth state
   const [authorized, setAuthorized] = useState(false);
   const [checkAuthorized, setCheckAuthorized] = useState(true);
+  const [isPublicUser, setIsPublicUser] = useState(false)
   const [token, setToken] = useState('');
   const [expire, setExpire] = useState(0);
 
@@ -22,7 +23,7 @@ const HomePage = () => {
   const axiosJWT = axiosInterceptors({ expire, token, setToken, setExpire });
 
   useEffect(() => {
-    refreshToken({setAuthorized, setCheckAuthorized, setExpire, setToken});
+    refreshToken({setAuthorized, setCheckAuthorized, setExpire, setToken, setIsPublicUser});
     getProducts()
   }, []);
 
@@ -54,6 +55,10 @@ const HomePage = () => {
         <PageLoader />
       </div>
     );
+  }
+
+  if(!authorized && !isPublicUser) {
+    return null
   }
 
   return (
