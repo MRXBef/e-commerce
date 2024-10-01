@@ -10,6 +10,7 @@ const BuyNowPage = () => {
   const [checkAuthorized, setCheckAuthorized] = useState(true);
   const [token, setToken] = useState("");
   const [expire, setExpire] = useState(0);
+  const [isPublicUser, setIsPublicUser] = useState(false)
 
   //this page state
   const [buyNowData, setBuyNowData] = useState({});
@@ -19,7 +20,7 @@ const BuyNowPage = () => {
   const axiosJWT = axiosInterceptors({token, setToken, expire, setExpire})
 
   useEffect(() => {
-    refreshToken({ setAuthorized, setCheckAuthorized, setExpire, setToken });
+    refreshToken({ setAuthorized, setCheckAuthorized, setExpire, setToken, setIsPublicUser });
 
     if (authorized) {
       refreshBuyNowToken();
@@ -58,6 +59,10 @@ const BuyNowPage = () => {
         <PageLoader />
       </div>
     );
+  }
+
+  if(!authorized && !isPublicUser) {
+    return null
   }
 
   console.log(buyNowData)
