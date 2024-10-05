@@ -8,6 +8,7 @@ import loginHero from "../assets/img/login-hero.png";
 import logoProduct from "../assets/img/logo-product.png";
 import axios from "axios";
 import * as icon from "@coreui/icons";
+import { Alert } from "../components/Alert";
 
 const RegisterPage = () => {
   const [token, setToken] = useState("");
@@ -27,6 +28,7 @@ const RegisterPage = () => {
   const [selectedCities, setSelectedCities] = useState(null);
 
   const navigate = useNavigate();
+  const { handleShowAlert, AlertComponent } = Alert();
 
   useEffect(() => {
     refreshToken({
@@ -77,15 +79,30 @@ const RegisterPage = () => {
 
   const handleCitiesOnChange = (e) => {
     const { value } = e.target;
-    if(value === "") {
-        setSelectedCities(null)
-        return
+    if (value === "") {
+      setSelectedCities(null);
+      return;
     }
     setSelectedCities(value);
   };
 
   const Register = async (e) => {
     e.preventDefault();
+
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_BASEURL}/register`, {
+        email: email,
+        password: password,
+        confPassword: confPassword,
+        province: selectedProvincies,
+        city: selectedCities
+      })
+      if(response) {
+        navigate('/')
+      }
+    } catch (error) {
+      handleShowAlert(error.response.data.msg, false)
+    }
   };
 
   if (checkAuthorized) {
@@ -107,6 +124,7 @@ const RegisterPage = () => {
 
   return (
     <div className="register-container">
+      <AlertComponent/>
       <div className="register-box-outer">
         <div className="register-box-inner-hero">
           <img src={loginHero} />

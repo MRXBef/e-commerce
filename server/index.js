@@ -13,6 +13,8 @@ import Products from "./models/productModel.js";
 import Image from "./models/imageModel.js";
 import Category from "./models/categoryModel.js";
 import Transaction from "./models/transactionModel.js";
+import userAddress from "./models/userAddress.js";
+import UserRelation from "./models/userRelation.js";
 
 //import associations
 import defineAssociations from "./models/associations.js";
@@ -27,7 +29,9 @@ try {
   console.log("database connected");
   
   defineAssociations()
-  await db.sync();
+  await db.sync(
+    // {alter: true}
+  );
 } catch (error) {
   console.log("error: " + error);
 }

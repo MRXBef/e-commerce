@@ -3,6 +3,7 @@ import Category from "./categoryModel.js"
 import Image from "./imageModel.js"
 import Products from "./productModel.js"
 import Transaction from "./transactionModel.js"
+import UserAddress from "./userAddress.js"
 import Users from "./userModel.js"
 import UserRelation from "./userRelation.js"
 
@@ -109,6 +110,17 @@ const defineAssociations = () => {
     Products.hasMany(Transaction, {
         foreignKey: 'product_id',
         as: 'transactions'
+    })
+
+    //user address associations
+    UserAddress.belongsTo(Users, {
+        foreignKey: 'user_id',
+        as: 'address',
+        onDelete: 'SET NULL'
+    })
+    Users.hasMany(UserAddress, {
+        foreignKey: 'user_id',
+        as: 'addresss'
     })
     
 }

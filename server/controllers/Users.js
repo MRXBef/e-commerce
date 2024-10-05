@@ -9,16 +9,27 @@ import Products from "../models/productModel.js";
 import Image from "../models/imageModel.js";
 import UserRelation from "../models/userRelation.js";
 import Cart from "../models/cartModel.js";
+import { listKotaKabupaten, listProvinsi } from "../config/IndonesiaProvinciesAndCity.js";
+import UserAddress from "../models/userAddress.js";
 
 export const register = async (req, res) => {
-  const { email, password, confPassword } = req.body;
-  if (!email || !password || !confPassword) {
+  const { email, password, confPassword, province, city } = req.body;
+  if (!email || !password || !confPassword || !province || !city) {
     return res.status(400).json({ msg: "Semua kolom wajib di isi!" });
   }
   if (password !== confPassword) {
     return res
       .status(400)
       .json({ msg: "Password dan konfirmasi password harus sama!" });
+  }
+  const findProvince = listProvinsi.find(prov => prov.id == province)
+  if(!findProvince) {
+    return res.status(404).json({msg: "Provinsi tidak ditemukan!"})
+  }
+
+  const findCity = listKotaKabupaten.find(cit => cit.provinsiId == province && cit.id == city)
+  if(!findCity) {
+    return res.status(404).json({msg: "Kota/Kabupaten tidak sesuai dengan provinsi terpilih!"})
   }
 
   try {
@@ -29,13 +40,47 @@ export const register = async (req, res) => {
 
     const hashPassword = await bcrypt.hash(password, 10);
     const username = `${email.split("@")[0]}${uuidv4().split("-")[0]}`;
-    await Users.create({
+    const createUser = await Users.create({
       username: username,
       email: email,
       role: "user",
       password: hashPassword,
       balance: 0,
     });
+
+    console.log(createUser)
+
+    const userId = createUser.dataValues.id
+    const emailSign = createUser.dataValues.email
+    const usernameSign = createUser.dataValues.username
+    const userAvatar = createUser.dataValues.avatar
+
+    const refreshToken = jwt.sign(
+      { userId, emailSign, usernameSign, userAvatar },
+      process.env.REFRESH_TOKEN_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    await Users.update(
+      {refreshToken: refreshToken},
+      {where: {id: userId}}
+    )
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      maxAge: (24 * 7) * 60 * 60 * 1000,
+      //secure: true,
+      //sameSite: 'none'
+
+      //un-comment 2 list di atas jika menggunakan https
+    });
+
+    await UserAddress.create({
+      provinceId: province,
+      cityId: city,
+      user_id: userId
+    })
+
     return res.status(200).json({ msg: "Berhasil membuat akun" });
   } catch (error) {
     console.log(error);
