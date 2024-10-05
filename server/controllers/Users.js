@@ -27,8 +27,13 @@ export const register = async (req, res) => {
     return res.status(404).json({msg: "Provinsi tidak ditemukan!"})
   }
 
-  const findCity = listKotaKabupaten.find(cit => cit.provinsiId == province && cit.id == city)
+  const findCity = listKotaKabupaten.find(cit => cit.id == city)
   if(!findCity) {
+    return res.status(404).json({msg: "Kota/Kabupaten tidak ditemukan!"})
+  }
+
+  const compareProvinceWithCity = listKotaKabupaten.find(cit => cit.provinsiId == province && cit.id == city)
+  if(!compareProvinceWithCity) {
     return res.status(404).json({msg: "Kota/Kabupaten tidak sesuai dengan provinsi terpilih!"})
   }
 
