@@ -6,6 +6,7 @@ import { addProduct, deleteProduct, getAllProduct, getProductByUuid, getProductI
 import getPublicId from "../middleware/getPublicId.js";
 import { handleAddCart } from "../controllers/Carts.js";
 import { createBuyNowToken } from "../controllers/Transactions.js";
+import { getCities, getProvincies } from "../controllers/Location.js";
 
 const router = express.Router();
 
@@ -35,6 +36,10 @@ router.post('/cart', verifyToken, handleAddCart)
 //transactions
 router.post("/transaction", verifyToken, createBuyNowToken)
 router.get('/transaction/token', refreshBuyNowToken)
+
+//location
+router.get('/location/provincies', getProvincies)
+router.get('/location/cities/:provincieId', getCities)
 
 
 export default router;

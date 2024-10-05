@@ -5,6 +5,7 @@ import HomePage from "./pages/HomePage";
 import ProfilePage from "./pages/ProfilePage";
 import ProductPage from "./pages/ProductPage";
 import BuyNowPage from "./pages/buyNowPage";
+import RegisterPage from "./pages/RegisterPage";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage/>} />
           <Route path="/login" element={<LoginPage/>} />
+          <Route path="/register" element={<RegisterPage/>} />
           <Route path="/mprofile" element={<ProfilePage/>} />
           <Route path="/shop/:username" element={<>toko orang</>} />
           <Route path="/product/:product_uuid" element={<ProductPage/>} />

@@ -104,7 +104,7 @@ const LoginPage = () => {
             <div className="switch">
               <p style={{ color: "var(--primary-color)" }}>
                 Belum punya akun?{" "}
-                <a href="" style={{ color: "var(--info-color)" }}>
+                <a href="/register" style={{ color: "var(--info-color)" }}>
                   Daftar
                 </a>
               </p>
