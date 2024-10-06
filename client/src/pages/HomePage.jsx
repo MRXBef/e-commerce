@@ -87,7 +87,8 @@ const HomePage = () => {
                 productPrice: rupiahFormat(product.price),
                 productDiscount: product.discount,
                 productUuid: product.uuid,
-                productOwner: product.owner
+                productOwner: product.owner,
+                productLocation: product.province
               }}
             />
           ))}

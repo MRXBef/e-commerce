@@ -210,6 +210,12 @@ const ProductPage = () => {
                   <div className="category" key={index}>{category.name.toUpperCase()}</div>
                 ))}
               </div>
+              <div className="location-container">
+                <i style={{color: 'var(--primary-color)'}}>
+                  <CIcon icon={icon.cilLocationPin}/>
+                </i>
+                <h1 style={{color: 'var(--secondary-color)'}}>{product.user.addresss[0].province}</h1>
+              </div>
               <div className="owner-container">
                 <img
                   src={`${import.meta.env.VITE_BASEURL}/user/avatar/${

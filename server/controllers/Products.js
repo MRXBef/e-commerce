@@ -9,6 +9,8 @@ import { Op } from "sequelize";
 import Users from "../models/userModel.js";
 import Transaction from "../models/transactionModel.js";
 import { imagePath } from "./Directory.js";
+import UserAddress from "../models/userAddress.js";
+import { listKotaKabupaten, listProvinsi } from "../config/IndonesiaProvinciesAndCity.js";
 
 export const addProduct = async (req, res) => {
   if (!req.files || !req.files.image) {
@@ -142,6 +144,13 @@ export const getAllProduct = async (req, res) => {
           required: true,
           as: "user",
           attributes: ["username", "avatar"],
+          include: [
+            {
+              model: UserAddress,
+              required: true,
+              as: 'addresss'
+            }
+          ]
         },
       ],
       where: {
@@ -154,6 +163,8 @@ export const getAllProduct = async (req, res) => {
     });
 
     const newProducts = products.map((product) => {
+      const provinceId = product.dataValues.user.dataValues.addresss[0].dataValues.provinceId
+      const cityId = product.dataValues.user.dataValues.addresss[0].dataValues.cityId
       return {
         uuid: product.dataValues.uuid,
         name: product.dataValues.name,
@@ -162,6 +173,8 @@ export const getAllProduct = async (req, res) => {
         thumbnail: product.dataValues.images[0].dataValues.file_name,
         owner: product.dataValues.user.dataValues.username,
         owner_avatar: product.dataValues.user.dataValues.avatar,
+        province: listProvinsi.find(prov => prov.id === provinceId).name,
+        city: listKotaKabupaten.find(cit => cit.provinsiId === provinceId && cit.id ===cityId).name
       };
     });
 
@@ -190,7 +203,14 @@ export const getProductByUuid = async(req, res) => {
           model: Users,
           as: 'user',
           required: true,
-          attributes: ['username', 'avatar']
+          attributes: ['username', 'avatar'],
+          include: [
+            {
+              model: UserAddress,
+              as: 'addresss',
+              required: true
+            }
+          ]
         },
         {
           model: Image,
@@ -211,7 +231,11 @@ export const getProductByUuid = async(req, res) => {
       ],
     })
 
-    const productJSON = product.toJSON()
+    console.log(product.toJSON().user.addresss[0])
+
+    let productJSON = product.toJSON()
+    const mainProvinceId = productJSON.user.addresss[0].provinceId
+    productJSON.user.addresss[0].province = listProvinsi.find(prov => prov.id === mainProvinceId).name
     
     // console.log(productJSON)
     res.status(200).json(productJSON)

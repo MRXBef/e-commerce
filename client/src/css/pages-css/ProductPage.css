@@ -156,6 +156,12 @@
     cursor: pointer;
 }
 
+.location-container {
+    width: 100%;
+    display: flex;
+    padding: 10px;
+}
+
 .owner-container {
     width: 100%;
     padding: 10px;
