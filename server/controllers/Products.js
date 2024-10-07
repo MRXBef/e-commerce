@@ -168,7 +168,6 @@ export const getAllProduct = async (req, res) => {
         [Op.and]: [
           { user_id: { [Op.ne]: publicId ?? 0 } },
           { user_id: { [Op.not]: null } },
-          // { id: { [Op.lt]: benchmarkId } }
           ...(benchmarkId ? [{ id: { [Op.lt]: benchmarkId } }] : [])
         ],
       },
