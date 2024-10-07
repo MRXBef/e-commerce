@@ -1,1 +1,2 @@
-npm install
+npm install - server
+pnpm install - client
