@@ -16,21 +16,22 @@ const HomePage = () => {
   const [token, setToken] = useState('');
   const [expire, setExpire] = useState(0);
 
-  //root state
+  //this state
   const [products, setProducts] = useState([]);
+  const [isProductFinished, setIsProductFinished] = useState(false)
 
   //inisialisasi axios interceptors
   const axiosJWT = axiosInterceptors({ expire, token, setToken, setExpire });
 
   useEffect(() => {
     refreshToken({setAuthorized, setCheckAuthorized, setExpire, setToken, setIsPublicUser});
-    getProducts()
+    getProducts(Infinity)
   }, []);
 
-  const getProducts = async () => {
+  const getProducts = async (benchmarkId) => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_BASEURL}/product`
+        `${import.meta.env.VITE_BASEURL}/product/foryou/${benchmarkId}`
       );
       setProducts(response.data.datas);
       setCheckAuthorized(false);
@@ -39,6 +40,21 @@ const HomePage = () => {
       setCheckAuthorized(true);
     }
   };
+  
+  const handleShowMore = async(benchmarkId) => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASEURL}/product/foryou/${benchmarkId}`
+      );
+      if(response.status === 204) {
+        return setIsProductFinished(true)
+      }
+      console.log(response)
+      setProducts((prevState) => [...prevState, ...response.data.datas]);
+    } catch (error) {
+      console.log(error.response);
+    }
+  }
 
   if (checkAuthorized) {
     return (
@@ -69,8 +85,9 @@ const HomePage = () => {
       }} />
 
       <div className="content-container">
+
         <div className="highlight-title-container">
-          <h1>Produk Terlaris</h1>
+          <h1>Untuk Kamu</h1>
         </div>
         <div className="highlight-container">
           {products.map((product, index) => (
@@ -93,6 +110,16 @@ const HomePage = () => {
             />
           ))}
         </div>
+        <div className="highlight-more-container">
+          {
+            !isProductFinished ? (
+              <button onClick={() => handleShowMore(products[products.length - 1].id)}>Lebih banyak</button>
+            ) : (
+              <h1>Tidak ada produk "Untuk Kamu" lagi untuk di muat</h1>
+            )
+          }
+        </div>
+
       </div>
     </div>
   );

@@ -26,7 +26,7 @@ router.post('/user/avatar', verifyToken, changeAvatarProfile)
 //products
 router.post('/product', verifyToken, addProduct)
 router.delete('/product/:uuid', verifyToken, deleteProduct)
-router.get('/product/', getPublicId, getAllProduct)
+router.get('/product/foryou/:benchmarkId', getPublicId, getAllProduct)
 router.get('/product/:product_uuid', getProductByUuid)
 router.get('/product/image/:filename', getProductImage)
 

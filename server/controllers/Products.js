@@ -126,12 +126,23 @@ export const addProduct = async (req, res) => {
   }
 };
 
+//Untuk Kamu
 export const getAllProduct = async (req, res) => {
   const { publicId } = req;
+  let { benchmarkId } = req.params
+  if(!benchmarkId) {
+    return res.status(400).json({msg: "Benchmark required"})
+  }
+
+  console.log(benchmarkId)
+  if (!benchmarkId || benchmarkId === "Infinity") {
+    benchmarkId = null;
+  }
 
   try {
     const products = await Products.findAll({
-      attributes: ["uuid", "name", "price", "discount"],
+      order: [['id', 'DESC']],
+      attributes: ["id", "uuid", "name", "price", "discount"],
       include: [
         {
           model: Image,
@@ -157,15 +168,22 @@ export const getAllProduct = async (req, res) => {
         [Op.and]: [
           { user_id: { [Op.ne]: publicId ?? 0 } },
           { user_id: { [Op.not]: null } },
+          // { id: { [Op.lt]: benchmarkId } }
+          ...(benchmarkId ? [{ id: { [Op.lt]: benchmarkId } }] : [])
         ],
       },
-      // limit: 20,
+      limit: 18,
     });
+
+    if(products.length < 1) {
+      return res.status(204).json({msg: "Products not found"})
+    }
 
     const newProducts = products.map((product) => {
       const provinceId = product.dataValues.user.dataValues.addresss[0].dataValues.provinceId
       const cityId = product.dataValues.user.dataValues.addresss[0].dataValues.cityId
       return {
+        id: product.dataValues.id,
         uuid: product.dataValues.uuid,
         name: product.dataValues.name,
         price: product.dataValues.price,
@@ -231,13 +249,10 @@ export const getProductByUuid = async(req, res) => {
       ],
     })
 
-    console.log(product.toJSON().user.addresss[0])
-
     let productJSON = product.toJSON()
     const mainProvinceId = productJSON.user.addresss[0].provinceId
     productJSON.user.addresss[0].province = listProvinsi.find(prov => prov.id === mainProvinceId).name
     
-    // console.log(productJSON)
     res.status(200).json(productJSON)
   } catch (error) {
     console.log(error.message)
