@@ -127,7 +127,7 @@ export const addProduct = async (req, res) => {
 };
 
 //Untuk Kamu
-export const getAllProduct = async (req, res) => {
+export const getForYouProduct = async (req, res) => {
   const { publicId } = req;
   let { benchmarkId } = req.params
   if(!benchmarkId) {

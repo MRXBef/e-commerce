@@ -1,5 +1,5 @@
 import Users from "../models/userModel.js";
-import jwt from "jsonwebtoken";
+import jwt, { decode } from "jsonwebtoken";
 
 //this function for auth token refreshing
 export const refreshToken = async (req, res) => {
@@ -46,9 +46,11 @@ export const refreshBuyNowToken = async (req, res) => {
 
   jwt.verify(token, process.env.BUYNOW_TOKEN_SECRET, (err, decoded) => {
     if (err) return res.sendStatus(403);
+    console.log(decoded)
 
     const payload = {
       buyerId: decoded.buyerId,
+      buyerProvinceId: decoded.buyerProvinceId,
       productData: { ...decoded.productData },
     };
     const newToken = jwt.sign(payload, process.env.BUYNOW_TOKEN_SECRET, {

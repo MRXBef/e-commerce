@@ -1,5 +1,6 @@
 import Products from "../models/productModel.js";
 import jwt from "jsonwebtoken";
+import UserAddress from "../models/userAddress.js";
 
 export const createBuyNowToken = async (req, res) => {
   const { productUuid, productOwner } = req.body;
@@ -21,10 +22,31 @@ export const createBuyNowToken = async (req, res) => {
       return res.status(404).json({ msg: "Produk tidak ditemukan!" });
     }
 
-    const payload = {
+    let payload = {
       productData: { ...product.toJSON() },
       buyerId: req.userID,
     };
+
+    const sellerProvinceId = await UserAddress.findOne({
+      where: { user_id: payload.productData.user_id },
+      raw: true
+    });
+    if(!sellerProvinceId) {
+      return res.status(404).json({msg: "Seller province not found"})
+    }
+
+    const buyerProvinceId = await UserAddress.findOne({
+      where: { user_id: req.userID },
+      raw: true
+    });
+    if(!buyerProvinceId) {
+      return res.status(404).json({msg: "Buyer province not found"})
+    }
+
+    payload.buyerProvinceId = buyerProvinceId.provinceId
+    payload.productData.sellerProvinceId = sellerProvinceId.provinceId
+
+    // console.log(payload)
 
     const buyNowToken = jwt.sign(payload, process.env.BUYNOW_TOKEN_SECRET, {
       expiresIn: "7d",

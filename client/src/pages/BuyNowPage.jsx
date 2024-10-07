@@ -37,7 +37,7 @@ const BuyNowPage = () => {
       setBuyNowData(decodeToken(response.data.buyNowToken));
       setCheckBuyNowToken(false);
     } catch (error) {
-      if(error.response.status === 403) { 
+      if(error.response.status === 403 || error.response.status === 400) { 
         navigate(-1)
       }
       console.log(error.response);

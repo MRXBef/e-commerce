@@ -2,7 +2,7 @@ import express from "express";
 import { register, getUserData, login, logout, getUserAvatar, changeAvatarProfile } from "../controllers/Users.js";
 import verifyToken from "../middleware/verifyToken.js";
 import { refreshBuyNowToken, refreshToken } from "../controllers/RefreshToken.js";
-import { addProduct, deleteProduct, getAllProduct, getProductByUuid, getProductImage } from "../controllers/Products.js";
+import { addProduct, deleteProduct, getForYouProduct, getProductByUuid, getProductImage } from "../controllers/Products.js";
 import getPublicId from "../middleware/getPublicId.js";
 import { handleAddCart } from "../controllers/Carts.js";
 import { createBuyNowToken } from "../controllers/Transactions.js";
@@ -26,7 +26,7 @@ router.post('/user/avatar', verifyToken, changeAvatarProfile)
 //products
 router.post('/product', verifyToken, addProduct)
 router.delete('/product/:uuid', verifyToken, deleteProduct)
-router.get('/product/foryou/:benchmarkId', getPublicId, getAllProduct)
+router.get('/product/foryou/:benchmarkId', getPublicId, getForYouProduct)
 router.get('/product/:product_uuid', getProductByUuid)
 router.get('/product/image/:filename', getProductImage)
 

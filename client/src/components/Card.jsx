@@ -176,30 +176,35 @@ const Card = ({ args }) => {
           {args.productTitle}
         </h1>
       </div>
-      <div
-        style={{
-          width: "100%",
-          overflow: "hidden",
-          textAlign: "center",
-          display: 'flex',
-          justifyContent: 'center'
-        }}
-      >
-        <i style={{color: 'var(--secondary-color)'}}>
-          <CIcon icon={icon.cilLocationPin}/>
-        </i>
-        <h1
-          style={{
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            fontSize: "100%",
-            color: "var(--primary-color)",
-          }}
-        >
-          {args.productLocation}
-        </h1>
-      </div>
+      {
+        !args.isOwnProduct && (
+          <div
+            style={{
+              width: "100%",
+              overflow: "hidden",
+              textAlign: "center",
+              display: 'flex',
+              justifyContent: 'center'
+            }}
+          >
+            <i style={{color: 'var(--secondary-color)'}}>
+              <CIcon icon={icon.cilLocationPin}/>
+            </i>
+            <h1
+              style={{
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                fontSize: "100%",
+                color: "var(--primary-color)",
+              }}
+            >
+              {args.productLocation}
+            </h1>
+          </div>
+
+        )
+      }
       <div
         style={{
           width: "100%",
