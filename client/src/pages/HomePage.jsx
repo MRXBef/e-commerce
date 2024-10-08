@@ -43,6 +43,10 @@ const HomePage = () => {
       const response = await axios.get(
         `${import.meta.env.VITE_BASEURL}/product/foryou/${benchmarkId}`
       );
+    if(response.status === 200 && response.data.msg === "Produk akan segera habis") {
+      setProducts(response.data.datas);
+      return setIsProductFinished(true)
+    }
       setProducts(response.data.datas);
       setCheckAuthorized(false);
     } catch (error) {
@@ -56,8 +60,11 @@ const HomePage = () => {
       const response = await axios.get(
         `${import.meta.env.VITE_BASEURL}/product/foryou/${benchmarkId}`
       );
-      if (response.status === 204) {
+      if (response.status === 204 && response.status === "Produk sudah mencapai batas habis") {
         return setIsProductFinished(true);
+      }else if(response.status === 200 && response.data.msg === "Produk akan segera habis") {
+        setProducts((prevState) => [...prevState, ...response.data.datas]);
+        return setIsProductFinished(true)
       }
       setProducts((prevState) => [...prevState, ...response.data.datas]);
     } catch (error) {
@@ -124,13 +131,13 @@ const HomePage = () => {
             />
           ))}
         </div>
-        {products.length > 0 && products.length >= 18 && (
+        {products.length > 0 && (
           <div className="highlight-more-container">
             {!isProductFinished ? (
               <button
                 onClick={() => handleShowMore(products[products.length - 1].id)}
               >
-                Lebih banyak
+                Muat lebih banyak produk
               </button>
             ) : (
               <h1>Tidak ada produk "Untuk Kamu" lagi untuk di muat</h1>

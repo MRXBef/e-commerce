@@ -10,7 +10,10 @@ import Users from "../models/userModel.js";
 import Transaction from "../models/transactionModel.js";
 import { imagePath } from "./Directory.js";
 import UserAddress from "../models/userAddress.js";
-import { listKotaKabupaten, listProvinsi } from "../config/IndonesiaProvinciesAndCity.js";
+import {
+  listKotaKabupaten,
+  listProvinsi,
+} from "../config/IndonesiaProvinciesAndCity.js";
 
 export const addProduct = async (req, res) => {
   if (!req.files || !req.files.image) {
@@ -33,11 +36,11 @@ export const addProduct = async (req, res) => {
     price: "Harga Produk",
     description: "Deskripsi Produk",
     category: "Kategori Produk",
-  }
+  };
   const requiredFields = { name, price, description, category };
   for (const key in requiredFields) {
     if (requiredFields[key] === undefined || requiredFields[key] === "") {
-      const fieldLabel = fieldLabels[key]
+      const fieldLabel = fieldLabels[key];
       return res.status(400).json({ msg: `${fieldLabel} dibutuhkan!` });
     }
   }
@@ -129,19 +132,19 @@ export const addProduct = async (req, res) => {
 //Untuk Kamu
 export const getForYouProduct = async (req, res) => {
   const { publicId } = req;
-  let { benchmarkId } = req.params
-  if(!benchmarkId) {
-    return res.status(400).json({msg: "Benchmark required"})
+  let { benchmarkId } = req.params;
+  if (!benchmarkId) {
+    return res.status(400).json({ msg: "Benchmark required" });
   }
 
-  console.log(benchmarkId)
+  console.log(benchmarkId);
   if (!benchmarkId || benchmarkId === "Infinity") {
     benchmarkId = null;
   }
 
   try {
     const products = await Products.findAll({
-      order: [['id', 'DESC']],
+      order: [["id", "DESC"]],
       attributes: ["id", "uuid", "name", "price", "discount"],
       include: [
         {
@@ -159,28 +162,30 @@ export const getForYouProduct = async (req, res) => {
             {
               model: UserAddress,
               required: true,
-              as: 'addresss'
-            }
-          ]
+              as: "addresss",
+            },
+          ],
         },
       ],
       where: {
         [Op.and]: [
           { user_id: { [Op.ne]: publicId ?? 0 } },
           { user_id: { [Op.not]: null } },
-          ...(benchmarkId ? [{ id: { [Op.lt]: benchmarkId } }] : [])
+          ...(benchmarkId ? [{ id: { [Op.lt]: benchmarkId } }] : []),
         ],
       },
       limit: 18,
     });
 
-    if(products.length < 1) {
-      return res.status(204).json({msg: "Products not found"})
+    if (products.length < 1) {
+      return res.status(204).json({ msg: "Produk sudah mencapai batas habis" });
     }
 
     const newProducts = products.map((product) => {
-      const provinceId = product.dataValues.user.dataValues.addresss[0].dataValues.provinceId
-      const cityId = product.dataValues.user.dataValues.addresss[0].dataValues.cityId
+      const provinceId =
+        product.dataValues.user.dataValues.addresss[0].dataValues.provinceId;
+      const cityId =
+        product.dataValues.user.dataValues.addresss[0].dataValues.cityId;
       return {
         id: product.dataValues.id,
         uuid: product.dataValues.uuid,
@@ -190,10 +195,18 @@ export const getForYouProduct = async (req, res) => {
         thumbnail: product.dataValues.images[0].dataValues.file_name,
         owner: product.dataValues.user.dataValues.username,
         owner_avatar: product.dataValues.user.dataValues.avatar,
-        province: listProvinsi.find(prov => prov.id === provinceId).name,
-        city: listKotaKabupaten.find(cit => cit.provinsiId === provinceId && cit.id ===cityId).name
+        province: listProvinsi.find((prov) => prov.id === provinceId).name,
+        city: listKotaKabupaten.find(
+          (cit) => cit.provinsiId === provinceId && cit.id === cityId
+        ).name,
       };
     });
+
+    if (products.length > 0 && products.length < 18) {
+      return res
+        .status(200)
+        .json({ msg: "Produk akan segera habis", datas: newProducts });
+    }
 
     res.status(200).json({
       msg: "Success",
@@ -205,60 +218,60 @@ export const getForYouProduct = async (req, res) => {
   }
 };
 
-export const getProductByUuid = async(req, res) => {
-  const {product_uuid} = req.params
-  if(!product_uuid) {
-    return res.status(400).json({msg: "product uuid required"})
+export const getProductByUuid = async (req, res) => {
+  const { product_uuid } = req.params;
+  if (!product_uuid) {
+    return res.status(400).json({ msg: "product uuid required" });
   }
 
   try {
     const product = await Products.findOne({
-      where: {uuid: product_uuid},
-      attributes: ['uuid', 'name', 'description', 'price', 'stock', 'discount'],
+      where: { uuid: product_uuid },
+      attributes: ["uuid", "name", "description", "price", "stock", "discount"],
       include: [
         {
           model: Users,
-          as: 'user',
+          as: "user",
           required: true,
-          attributes: ['username', 'avatar'],
+          attributes: ["username", "avatar"],
           include: [
             {
               model: UserAddress,
-              as: 'addresss',
-              required: true
-            }
-          ]
+              as: "addresss",
+              required: true,
+            },
+          ],
         },
         {
           model: Image,
-          as: 'images',
+          as: "images",
           required: true,
-          attributes: ['file_name'],
+          attributes: ["file_name"],
         },
         {
           model: Transaction,
-          as: 'transactions',
-          attributes: ['uuid']
+          as: "transactions",
+          attributes: ["uuid"],
         },
         {
           model: Category,
-          as: 'categories',
-          attributes: ['name']
-        }
+          as: "categories",
+          attributes: ["name"],
+        },
       ],
-    })
+    });
 
-    let productJSON = product.toJSON()
-    const mainProvinceId = productJSON.user.addresss[0].provinceId
-    productJSON.user.addresss[0].province = listProvinsi.find(prov => prov.id === mainProvinceId).name
-    
-    res.status(200).json(productJSON)
+    let productJSON = product.toJSON();
+    const mainProvinceId = productJSON.user.addresss[0].provinceId;
+    productJSON.user.addresss[0].province = listProvinsi.find(
+      (prov) => prov.id === mainProvinceId
+    ).name;
+
+    res.status(200).json(productJSON);
   } catch (error) {
-    console.log(error.message)
+    console.log(error.message);
   }
-
-    
-}
+};
 
 export const getProductImage = (req, res) => {
   const filename = req.params["filename"];
