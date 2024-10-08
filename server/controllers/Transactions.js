@@ -46,7 +46,7 @@ export const createBuyNowToken = async (req, res) => {
     payload.buyerProvinceId = buyerProvinceId.provinceId
     payload.productData.sellerProvinceId = sellerProvinceId.provinceId
 
-    // console.log(payload)
+    console.log(payload)
 
     const buyNowToken = jwt.sign(payload, process.env.BUYNOW_TOKEN_SECRET, {
       expiresIn: "7d",
