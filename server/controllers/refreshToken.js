@@ -51,6 +51,7 @@ export const refreshBuyNowToken = async (req, res) => {
     const payload = {
       buyerId: decoded.buyerId,
       buyerProvinceId: decoded.buyerProvinceId,
+      shippingCost: decoded.shippingCost,
       productData: { ...decoded.productData },
     };
     const newToken = jwt.sign(payload, process.env.BUYNOW_TOKEN_SECRET, {

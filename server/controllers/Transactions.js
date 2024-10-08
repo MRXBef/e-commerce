@@ -1,6 +1,7 @@
 import Products from "../models/productModel.js";
 import jwt from "jsonwebtoken";
 import UserAddress from "../models/userAddress.js";
+import { getJarak } from "../config/IndonesiaProvinciesAndCity.js";
 
 export const createBuyNowToken = async (req, res) => {
   const { productUuid, productOwner } = req.body;
@@ -46,7 +47,10 @@ export const createBuyNowToken = async (req, res) => {
     payload.buyerProvinceId = buyerProvinceId.provinceId
     payload.productData.sellerProvinceId = sellerProvinceId.provinceId
 
-    console.log(payload)
+    const provinceGap = getJarak(buyerProvinceId.provinceId, sellerProvinceId.provinceId)
+    const shippingCost = provinceGap * 15
+    payload.shippingCost = shippingCost
+    // console.log(payload)
 
     const buyNowToken = jwt.sign(payload, process.env.BUYNOW_TOKEN_SECRET, {
       expiresIn: "7d",
