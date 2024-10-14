@@ -11,6 +11,7 @@ import UserRelation from "../models/userRelation.js";
 import Cart from "../models/cartModel.js";
 import { listKotaKabupaten, listProvinsi } from "../config/IndonesiaProvinciesAndCity.js";
 import UserAddress from "../models/userAddress.js";
+import { refreshBuyNowToken } from "./RefreshToken.js";
 
 export const register = async (req, res) => {
   const { email, password, confPassword, province, city } = req.body;
@@ -157,7 +158,7 @@ export const logout = async (req, res) => {
       return res.sendStatus(403);
     }
 
-    await Users.update({ refreshToken: null }, { where: { id: user.id } });
+    await Users.update({ refreshToken: null, refreshBuyNowToken: null }, { where: { id: user.id } });
     res
       .clearCookie("refreshToken")
       .clearCookie("buyNow")
