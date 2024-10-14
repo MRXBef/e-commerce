@@ -26,6 +26,9 @@ const Users = db.define("users", {
     type: DataTypes.TEXT,
     allowNull: true
   },
+  refreshBuyNowToken: {
+    type: DataTypes.TEXT
+  },
   avatar: {
     type: DataTypes.TEXT,
     allowNull: true

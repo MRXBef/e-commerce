@@ -44,9 +44,14 @@ export const refreshBuyNowToken = async (req, res) => {
     return res.status(400).json({ msg: "Tidak ada token!" });
   }
 
-  jwt.verify(token, process.env.BUYNOW_TOKEN_SECRET, (err, decoded) => {
+  const user = await Users.findOne({where: {refreshBuyNowToken: token}})
+  if(!user) {
+    return res.status(403).json({msg: "Token yang diberikan tidak tersedia di database!"})
+  }
+
+  jwt.verify(token, process.env.REFRESH_BUYNOW_TOKEN_SECRET, (err, decoded) => {
     if (err) return res.sendStatus(403);
-    console.log(decoded)
+    // console.log(decoded)
 
     const payload = {
       buyerId: decoded.buyerId,
@@ -54,10 +59,11 @@ export const refreshBuyNowToken = async (req, res) => {
       shippingCost: decoded.shippingCost,
       productData: { ...decoded.productData },
     };
-    const newToken = jwt.sign(payload, process.env.BUYNOW_TOKEN_SECRET, {
-      expiresIn: "7d",
-    });
 
-    res.status(200).json({ buyNowToken: newToken });
+    const accessBuyNowToken = jwt.sign(payload, process.env.ACCESS_BUYNOW_TOKEN_SECRET, {
+      expiresIn: '7d'
+    })
+
+    res.status(200).json({accessBuyNowToken});
   });
 };

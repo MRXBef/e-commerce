@@ -13,7 +13,7 @@ const BuyNowPage = () => {
   const [isPublicUser, setIsPublicUser] = useState(false)
 
   //this page state
-  const [buyNowData, setBuyNowData] = useState({});
+  const [buyNowToken, setBuyNowToken] = useState("");
   const [checkBuyNowToken, setCheckBuyNowToken] = useState(true);
 
   const navigate = useNavigate();
@@ -34,7 +34,7 @@ const BuyNowPage = () => {
       const response = await axios.get(
         `${import.meta.env.VITE_BASEURL}/transaction/token`
       );
-      setBuyNowData(decodeToken(response.data.buyNowToken));
+      setBuyNowToken(response.data.accessBuyNowToken);
       setCheckBuyNowToken(false);
     } catch (error) {
       if(error.response.status === 403 || error.response.status === 400) { 
@@ -65,7 +65,7 @@ const BuyNowPage = () => {
     return null
   }
 
-  console.log(buyNowData)
+  console.log(decodeToken(buyNowToken))
 
   return <div>BuyNowPage</div>;
 };

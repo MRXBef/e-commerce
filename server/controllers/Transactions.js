@@ -2,6 +2,8 @@ import Products from "../models/productModel.js";
 import jwt from "jsonwebtoken";
 import UserAddress from "../models/userAddress.js";
 import { getJarak } from "../config/IndonesiaProvinciesAndCity.js";
+import Users from "../models/userModel.js";
+import { refreshBuyNowToken } from "./RefreshToken.js";
 
 export const createBuyNowToken = async (req, res) => {
   const { productUuid, productOwner } = req.body;
@@ -52,9 +54,14 @@ export const createBuyNowToken = async (req, res) => {
     payload.shippingCost = shippingCost
     // console.log(payload)
 
-    const buyNowToken = jwt.sign(payload, process.env.BUYNOW_TOKEN_SECRET, {
+    const buyNowToken = jwt.sign(payload, process.env.REFRESH_BUYNOW_TOKEN_SECRET, {
       expiresIn: "7d",
     });
+
+    await Users.update(
+      {refreshBuyNowToken: buyNowToken},
+      {where: {username: productOwner}}
+    )
 
     res.cookie("buyNow", buyNowToken, {
       httpOnly: true,
