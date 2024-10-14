@@ -60,7 +60,7 @@ export const createBuyNowToken = async (req, res) => {
 
     await Users.update(
       {refreshBuyNowToken: buyNowToken},
-      {where: {username: productOwner}}
+      {where: {id: payload.buyerId}}
     )
 
     res.cookie("buyNow", buyNowToken, {
