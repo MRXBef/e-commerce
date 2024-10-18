@@ -3,6 +3,8 @@ import { axiosInterceptors, decodeToken, refreshToken } from "../utils/tokenHand
 import axios from "axios";
 import PageLoader from "../components/PageLoader";
 import { useNavigate } from "react-router-dom";
+import Header from "../components/Header";
+import '../css/pages-css/BuyNowPage.css'
 
 const BuyNowPage = () => {
   //auth state
@@ -14,6 +16,8 @@ const BuyNowPage = () => {
 
   //this page state
   const [buyNowToken, setBuyNowToken] = useState("");
+  const [buyNowExpire, setBuyNowExpire] = useState(0);
+  // const [buyNowData, setBuyNowData] = useState({})
   const [checkBuyNowToken, setCheckBuyNowToken] = useState(true);
 
   const navigate = useNavigate();
@@ -67,7 +71,54 @@ const BuyNowPage = () => {
 
   console.log(decodeToken(buyNowToken))
 
-  return <div>BuyNowPage</div>;
+  return (
+    <div className="page-container">
+      <Header
+      args={{
+        isAuthorized: authorized,
+        token: decodeToken(token)
+      }}
+      />
+
+      <div className="content-container">
+        <div className="buynow-container">
+          <div className="product-info-container">
+            <h1>Beli Sekarang</h1>
+          </div>
+          <div className="product-price-container">
+            <div className="cost-info">
+              <h1 style={{color: '#000', fontWeight: '500'}}>Total Belanja</h1>
+              <div className="const-info-field">
+                <h1>Total Harga (12 Barang)</h1>
+                <h1>Rp.12.000</h1>
+              </div>
+            </div>
+            <div className="cost-info">
+              <h1 style={{color: '#000', fontWeight: '500'}}>Biaya Transaksi</h1>
+              <div className="const-info-field">
+                <h1>Biaya Layanan</h1>
+                <h1>Rp.1.000</h1>
+              </div>
+            </div>
+            <div className="cost-info">
+              <h1 style={{color: '#000', fontWeight: '500'}}>Biaya Pengiriman</h1>
+              <div className="const-info-field">
+                <h1>Total</h1>
+                <h1>Rp.1.000</h1>
+              </div>
+            </div>
+            <div className="total-payment">
+              <h1>Total Tagihan</h1>
+              <h1>Rp.300.000</h1>
+            </div>
+            <div className="bayar">
+              <button>Bayar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
 };
 
 export default BuyNowPage;

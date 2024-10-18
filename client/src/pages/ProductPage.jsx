@@ -13,6 +13,7 @@ import CIcon from "@coreui/icons-react";
 import * as icon from "@coreui/icons";
 import rupiahFormat from "../utils/rupiahFormat";
 import { Alert } from "../components/Alert";
+import nullAvatar from '../assets/img/avatar.png'
 
 const ProductPage = () => {
   const [token, setToken] = useState("");
@@ -218,9 +219,9 @@ const ProductPage = () => {
               </div>
               <div className="owner-container">
                 <img
-                  src={`${import.meta.env.VITE_BASEURL}/user/avatar/${
+                  src={product.user.avatar ? `${import.meta.env.VITE_BASEURL}/user/avatar/${
                     product.user.avatar
-                  }`}
+                  }` : nullAvatar}
                 />
                 <h1>@{product.user.username}</h1>
               </div>
